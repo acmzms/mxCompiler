@@ -25,7 +25,8 @@ public class Main
             compiler.compile(inS);
         }
         catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println(e.toString());
+            e.printStackTrace();
             System.exit(1);
         }
     }
