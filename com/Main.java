@@ -20,7 +20,7 @@ public class Main
 
         mxCompiler compiler = new mxCompiler();
         try {
-            compiler.compile(inS, astOutS, irOutS, nasmOutS);
+            compiler.compile(System.in, astOutS, irOutS, nasmOutS);
         }
         catch (Exception e) {
             System.err.println(e.getMessage());
