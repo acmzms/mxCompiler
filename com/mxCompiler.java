@@ -12,7 +12,7 @@ class mxCompiler
     private ASTsemantic astsemantic;
     private ASTtraverse asttraverse;
     public mxCompiler() {astscope = new ASTscope(); astsemantic = new ASTsemantic(); asttraverse = new ASTtraverse();}
-    public void compile(InputStream inS, PrintStream astOutS, PrintStream irOutS, PrintStream nasmOutS) throws Exception
+    public void compile(InputStream inS) throws Exception//PrintStream astOutS, PrintStream irOutS, PrintStream nasmOutS) throws Exception
     {
         astscope = new ASTscope();
         astsemantic = new ASTsemantic();

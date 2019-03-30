@@ -13,14 +13,15 @@ public class Main
         String inFile = null, astOutFile = null, irOutFile = null, nasmOutFile = null;
         InputStream inS;
         PrintStream astOutS, irOutS, nasmOutS;
-        inS = new FileInputStream(inFile);
-        astOutS = new PrintStream(new FileOutputStream(astOutFile));
-        irOutS = new PrintStream(new FileOutputStream(irOutFile));
-        nasmOutS = new PrintStream(new FileOutputStream(nasmOutFile));
+        //inS = new FileInputStream(inFile);
+        inS = System.in;
+        //astOutS = new PrintStream(new FileOutputStream(astOutFile));
+        //irOutS = new PrintStream(new FileOutputStream(irOutFile));
+        //nasmOutS = new PrintStream(new FileOutputStream(nasmOutFile));
 
         mxCompiler compiler = new mxCompiler();
         try {
-            compiler.compile(System.in, astOutS, irOutS, nasmOutS);
+            compiler.compile(inS);
         }
         catch (Exception e) {
             System.err.println(e.getMessage());
