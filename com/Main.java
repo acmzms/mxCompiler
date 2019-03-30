@@ -11,10 +11,11 @@ public class Main
     public static void main(String[] args) throws Exception
     {
         String inFile = null, astOutFile = null, irOutFile = null, nasmOutFile = null;
-        InputStream inS;
+        InputStream inS = System.in;
+        //File infile = new File("~/MxCompiler/src/test.txt");
+        //InputStream inF = System.in;
         PrintStream astOutS, irOutS, nasmOutS;
         //inS = new FileInputStream(inFile);
-        inS = System.in;
         //astOutS = new PrintStream(new FileOutputStream(astOutFile));
         //irOutS = new PrintStream(new FileOutputStream(irOutFile));
         //nasmOutS = new PrintStream(new FileOutputStream(nasmOutFile));
