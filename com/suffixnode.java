@@ -7,7 +7,7 @@ class suffixnode extends calcnode
     private int op; // ++ 0, -- 1;
     private calcnode expr;
     public suffixnode() {super();}
-    public suffixnode(calcnode c) {super(); expr = new calcnode(c);}
+    public suffixnode(calcnode c) {super(); expr = c;}
     public void setop(int x) {op = x;}
     public calcnode getexpr(){return expr;}
 }

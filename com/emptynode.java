@@ -1,6 +1,6 @@
 package com;
 
-class emptynode extends leafnode
+class emptynode extends node
 {
     public emptynode(){super();}
 }
