@@ -342,7 +342,11 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitRetstmt(mxParser.RetstmtContext ctx)
     {
-        if(ctx.calculation() != null) {calcnode c = new calcnode((calcnode)visit(ctx.calculation())); return new retnode(c);}
+        if(ctx.calculation() != null)
+        {
+            calcnode c = (calcnode)visit(ctx.calculation());
+            return new retnode(c);
+        }
         else return new retnode();
     }
 
@@ -381,7 +385,7 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitArray(mxParser.ArrayContext ctx)
     {
-        idnode a = (idnode) visit(ctx.lhs);
+        calcnode a = (calcnode) visit(ctx.lhs);
         calcnode b = (calcnode) visit(ctx.rhs);
         return new subscriptnode(a, b);
     }
@@ -389,7 +393,7 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitPrefix(mxParser.PrefixContext ctx)
     {
-        calcnode c = new calcnode((calcnode) visit(ctx.calculation()));
+        calcnode c = (calcnode) visit(ctx.calculation());
         prefixnode p = new prefixnode(c);
         String op = ctx.op.getText();
         if(op.equals("+")) {p.setop(2);}
@@ -421,8 +425,8 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitBinary(mxParser.BinaryContext ctx)
     {
-        calcnode c1 = new calcnode((calcnode)visit(ctx.lhs));
-        calcnode c2 = new calcnode((calcnode)visit(ctx.rhs));
+        calcnode c1 = (calcnode)visit(ctx.lhs);
+        calcnode c2 = (calcnode)visit(ctx.rhs);
         binarynode b = new binarynode();
         b.setlval(c1);
         b.setrval(c2);
@@ -452,15 +456,15 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitClassfunc(mxParser.ClassfuncContext ctx)
     {
-        idnode c = new idnode((idnode)visit(ctx.calculation()));
-        idnode f = new idnode((idnode)visit(ctx.Identifier()));
+        calcnode c = (calcnode)visit(ctx.calculation());
+        idnode f = new idnode((ctx.Identifier().getText()));
         return new memaccessnode(c, f);
     }
 
     @Override
     public node visitSuffix(mxParser.SuffixContext ctx)
     {
-        calcnode c = new calcnode((calcnode) visit(ctx.calculation()));
+        calcnode c = (calcnode)visit(ctx.calculation());
         suffixnode p = new suffixnode(c);
         String op = ctx.op.getText();
         if(op.equals("++")) {p.setop(0);}
@@ -471,7 +475,7 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitSubexpr(mxParser.SubexprContext ctx)
     {
-        return new calcnode((calcnode)visit(ctx.calculation()));
+        return visit(ctx.calculation());
     }
 
     @Override
@@ -495,8 +499,8 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitAssign(mxParser.AssignContext ctx)
     {
-        calcnode l = new calcnode((calcnode) visit(ctx.lhs));
-        calcnode r = new calcnode((calcnode) visit(ctx.rhs));
+        calcnode l = (calcnode) visit(ctx.lhs);
+        calcnode r = (calcnode) visit(ctx.rhs);
         return new assignnode(l, r);
     }
 }

@@ -2,7 +2,7 @@ package com;
 
 import static java.lang.Character.isDigit;
 
-class constnode extends leafnode
+class constnode extends calcnode
 {
     private int type; // 0 int 1 bool 2 String 3 Null
     private String val;
@@ -11,9 +11,9 @@ class constnode extends leafnode
     {
         if(isDigit(val.charAt(0))) {type = 0;}
         if(val.charAt(0) == '"') {type = 2;}
-        if(val.charAt(0) == 'T') {type = 1;}
-        if(val.charAt(0) == 'F') {type = 1;}
-        if(val.charAt(0) == 'N') {type = 3;}
+        if(val.charAt(0) == 't') {type = 1;}
+        if(val.charAt(0) == 'f') {type = 1;}
+        if(val.charAt(0) == 'n') {type = 3;}
     }
     public String getconst() {return val;}
     public type totype()

@@ -12,11 +12,12 @@ class blocknode extends node
     private ArrayList <declaration> decls;
     private scope field;
     public blocknode()
-    {nestblock = new ArrayList<>(); calcs = new ArrayList <>(); condits = new ArrayList<>(); loops = new ArrayList<>(); ctrls = new ArrayList<>();field = new scope(this);}
+    {nestblock = new ArrayList<>(); calcs = new ArrayList <>(); condits = new ArrayList<>(); loops = new ArrayList<>(); ctrls = new ArrayList<>();
+    field = new scope(this);decls = new ArrayList<>();}
     public blocknode(scope s)
     {
         nestblock = new ArrayList<>(); calcs = new ArrayList <>(); condits = new ArrayList<>(); loops = new ArrayList<>(); ctrls = new ArrayList<>();
-        field = new scope(this);
+        field = new scope(this);decls= new ArrayList<>();
         s.addchildren(field);
     }
     public blocknode(blocknode b)
@@ -26,6 +27,7 @@ class blocknode extends node
         condits = b.getcondits();
         loops = b.getloops();
         ctrls = b.getctrls();
+        decls = b.getdecls();
         field = new scope(this);
     }
     public scope accfield() {return field;}

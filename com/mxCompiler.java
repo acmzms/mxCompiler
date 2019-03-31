@@ -25,7 +25,7 @@ class mxCompiler
         System.out.println("Visitor:");
         ASTtraverse evalByVisitor = new ASTtraverse();
         node n = evalByVisitor.visit(tree);
-        astscope.visitProgranmode((programnode) n);
+        astscope.visitProgramnode((programnode) n);
         astsemantic.acceptProgramnode((programnode) n);
         System.out.println();
     }

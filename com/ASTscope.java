@@ -3,7 +3,7 @@ package com;
 class ASTscope
 {
     public ASTscope() {}
-    public void visitProgranmode(programnode p)
+    public void visitProgramnode(programnode p)
     {
         for(int i = 0;i < p.retclass().size();i++)
         {

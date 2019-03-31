@@ -6,7 +6,7 @@ class calcnode extends node
 {
     private type typename;
     private boolean isleft;
-    public calcnode() {typename = new type("void"); isleft = true;}
+    public calcnode() {typename = new type("undefined"); isleft = true;}
     public String getname() {return typename.gettypename();}
     public type gettype() {return typename;}
     public boolean getleft() {return isleft;}

@@ -2,7 +2,7 @@ package com;
 
 import java.util.*;
 
-class thisnode extends leafnode
+class thisnode extends calcnode
 {
     public thisnode(){super();}
 }

@@ -2,7 +2,7 @@ package com;
 
 import java.util.*;
 
-class idnode extends leafnode
+class idnode extends calcnode
 {
     private String id;
     public idnode() {super();}

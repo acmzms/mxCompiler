@@ -10,7 +10,7 @@ class scope
     private scope father;
     public scope() {children = new ArrayList<>();vars = new HashMap<>();}
     public scope(scope f) {father = f;children = new ArrayList<>();vars = new HashMap<>();}
-    public scope(node n) {nodeptr = n;}
+    public scope(node n) {nodeptr = n; children = new ArrayList<>();vars = new HashMap<>();}
     public void addchildren(scope s)
     {
         s.father = this;

@@ -7,7 +7,7 @@ class newnode extends calcnode
     private int dim;
     private String type;
     private ArrayList<calcnode> sz;
-    public newnode() {}
+    public newnode() {sz = new ArrayList<>();}
     public void setdim(int x) {dim = x;}
     public void settype(String s) {type = s;}
     public void addsz(calcnode x) {if(x != null) {sz.add(new calcnode(x));}}

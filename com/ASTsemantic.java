@@ -10,6 +10,7 @@ class ASTsemantic {
 
     public ASTsemantic() {
         looplevel = 0;
+        currentscope = new Stack<>();
     }
 
     private programnode root;
@@ -139,7 +140,15 @@ class ASTsemantic {
         {
             if(b.getctrls().get(i) instanceof retnode)
             {
-                if(!((retnode) b.getctrls().get(i)).getr().gettype().tostring().equals(n.gettype())) {throw new Exception(("error 3 : wrong return type"));}
+                if(((retnode) b.getctrls().get(i)).getr() == null)
+                {
+                    if(!n.gettype().gettypename().equals("void")) {throw new Exception(("error 3 : wrong return type"));}
+                }
+                else if(!((retnode) b.getctrls().get(i)).getr().gettype().gettypename().equals(n.gettype().gettypename()))
+                {
+                    int j = 0;
+                    throw new Exception(("error 3 : wrong return type"));
+                }
             }
         }
         for(int i = 0;i < n.getparams().size();i++)
@@ -174,7 +183,7 @@ class ASTsemantic {
         type t = acceptCalcnode(n.getcond());
         acceptBlocknode(n.getif());
         if(n.getelse() != null) {acceptBlocknode(n.getelse());}
-        if(!t.tostring().equals("bool")){throw new Exception("error 8 : nonbool condition");}
+        if(!t.gettypename().equals("bool")){throw new Exception("error 8 : nonbool condition");}
     }
 
     public void acceptLoopnode(loopnode n) throws Exception
@@ -182,17 +191,17 @@ class ASTsemantic {
         if(n.getinit() != null)
         {
             type t = acceptCalcnode(n.getinit());
-            if(!t.tostring().equals("bool")) {throw new Exception("error 8 : nonbool condition");}
+            if(!t.gettypename().equals("bool")) {throw new Exception("error 8 : nonbool condition");}
         }
         if(n.getquit() != null)
         {
             type t = acceptCalcnode(n.getquit());
-            if(!t.tostring().equals("bool")) {throw new Exception("error 8 : nonbool condition");}
+            if(!t.gettypename().equals("bool")) {throw new Exception("error 8 : nonbool condition");}
         }
         if(n.getincr() != null)
         {
             type t = acceptCalcnode(n.getincr());
-            if(!t.tostring().equals("bool")) {throw new Exception("error 8 : nonbool condition");}
+            if(!t.gettypename().equals("bool")) {throw new Exception("error 8 : nonbool condition");}
         }
         looplevel++;
         acceptBlocknode(n.getstmt());
@@ -201,7 +210,8 @@ class ASTsemantic {
 
     public void acceptCtrlnode(ctrlnode n) throws Exception
     {
-        if(n instanceof retnode) {acceptCalcnode(((retnode) n).getr());}
+        if(n instanceof retnode)
+        {acceptCalcnode(((retnode) n).getr());}
         else
         {
             if(looplevel == 0){throw new Exception("error 9 : stray break or continue");}
@@ -211,17 +221,28 @@ class ASTsemantic {
     public type acceptCalcnode(calcnode n) throws Exception
     {
         type t = new type();
-        if(n instanceof funccallnode) {t = acceptFunccallnode((funccallnode) n); n.settype(t);}
-        if(n instanceof subscriptnode) {t = acceptSubscriptnode((subscriptnode) n); n.settype(t);}
-        if(n instanceof prefixnode) {t = acceptPrefixnode((prefixnode) n); n.settype(t);}
-        if(n instanceof newnode) {t = acceptNewnode((newnode) n); n.settype(t);}
-        if(n instanceof binarynode) {t = acceptBinarynode((binarynode) n); n.settype(t);}
-        if(n instanceof memaccessnode) {t = acceptMemaccessnode((memaccessnode) n); n.settype(t);}
-        if(n instanceof idnode) {t = acceptIdentifier((idnode) n); n.settype(t);}
-        if(n instanceof assignnode) {t = acceptAssignnode((assignnode) n); n.settype(t);}
-        if(n instanceof constnode) {t = acceptConstant((constnode) n); n.settype(t);}
-        if(n instanceof thisnode) {t = acceptThis((thisnode)n ); n.settype(t);}
-        if(n instanceof suffixnode) {t = acceptSuffixnode((suffixnode) n); n.settype(t);}
+        if(n instanceof funccallnode)
+        {t = acceptFunccallnode((funccallnode) n); n.settype(t);}
+        if(n instanceof subscriptnode)
+        {t = acceptSubscriptnode((subscriptnode) n); n.settype(t);}
+        if(n instanceof prefixnode)
+        {t = acceptPrefixnode((prefixnode) n); n.settype(t);}
+        if(n instanceof newnode)
+        {t = acceptNewnode((newnode) n); n.settype(t);}
+        if(n instanceof binarynode)
+        {t = acceptBinarynode((binarynode) n); n.settype(t);}
+        if(n instanceof memaccessnode)
+        {t = acceptMemaccessnode((memaccessnode) n); n.settype(t);}
+        if(n instanceof idnode)
+        {t = acceptIdentifier((idnode) n); n.settype(t);}
+        if(n instanceof assignnode)
+        {t = acceptAssignnode((assignnode) n); n.settype(t);}
+        if(n instanceof constnode)
+        {t = acceptConstant((constnode) n); n.settype(t);}
+        if(n instanceof thisnode)
+        {t = acceptThis((thisnode)n ); n.settype(t);}
+        if(n instanceof suffixnode)
+        {t = acceptSuffixnode((suffixnode) n); n.settype(t);}
         return t;
     }
 
@@ -241,7 +262,7 @@ class ASTsemantic {
                     type r = readtype(root.retclass().get(i), t.gettypename());
                     for(int j = 0;j < n.getargs().size();j++)
                     {
-                        if(!d.get(j).gettyp().equals(n.getargs().get(j))) {throw new Exception("error 4 : params mismatch");}
+                        if(!d.get(j).gettyp().equals(n.getargs().get(j).gettype())) {throw new Exception("error 4 : params mismatch");}
                     }
                     return r;
                 }
@@ -254,7 +275,7 @@ class ASTsemantic {
             type r = readtype(root, ((idnode) c).getid());
             for(int i = 0;i < n.getargs().size();i++)
             {
-                if(!d.get(i).gettyp().equals(n.getargs().get(i))) {throw new Exception("error 4 : params mismatch");}
+                if(!d.get(i).gettyp().equals(n.getargs().get(i).gettype())) {throw new Exception("error 4 : params mismatch");}
             }
             return r;
         }
@@ -264,7 +285,7 @@ class ASTsemantic {
     public type acceptSubscriptnode(subscriptnode n) throws Exception
     {
         n.setleft(true);
-        type t = acceptIdentifier(n.retid());
+        type t = acceptCalcnode(n.retid());
         t.decriter();
         acceptCalcnode(n.retdlt());
         return t;
@@ -308,11 +329,27 @@ class ASTsemantic {
 
     public type acceptBinarynode(binarynode n) throws Exception
     {
-        n.setleft(false);
+        n.setleft(false);                    int j = 0;
         type t1 = acceptCalcnode(n.getlval());
         type t2 = acceptCalcnode(n.getrval());
         if(!t1.isequal(t2)) {throw new Exception("Error 6 : wrong expression type");}
-        return t1;
+        switch (n.getop()) {
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 16:
+            case 17:
+            {
+                return new type("bool");
+            }
+            default:
+            {
+                return t1;
+            }
+        }
     }
 
     public type acceptIdentifier(idnode n) throws Exception
