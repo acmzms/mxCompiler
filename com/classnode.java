@@ -18,7 +18,7 @@ class classnode extends node
         classfunc = new ArrayList<>();
         field = new scope(this);
     }
-    public void addvar(String t, idnode id) throws Exception
+    public void addvar(type t, idnode id) throws Exception
     {
         field.addvar(t, id);
         classvars.add(new declaration(t, id));
@@ -27,7 +27,7 @@ class classnode extends node
     {
         classfunc.add(f);
     }
-    public void adddecl(String a, String b) { classvars.add(new declaration(a, new idnode(b))); }
+    public void adddecl(type a, String b) { classvars.add(new declaration(a, new idnode(b))); }
     public ArrayList<funcnode> retfunc() {return classfunc;}
     public ArrayList<declaration> retdecl() {return classvars;}
     public scope accfield() { return field; }

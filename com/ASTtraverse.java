@@ -22,7 +22,7 @@ class ASTtraverse extends mxBaseVisitor<node>
                 node n = visit(c);
                 if(n instanceof funcnode ) {p.addfunc((funcnode)n);}
                 if(n instanceof classnode ) {p.addclass((classnode)n);}
-                if(n instanceof declaration ){p.adddecl((declaration)n);}
+                if(n instanceof declaration ) {p.adddecl((declaration)n);}
             }
         }
         return p;
@@ -58,8 +58,8 @@ class ASTtraverse extends mxBaseVisitor<node>
         if(ctx.declpair() != null)
         {
             for (mxParser.DeclpairContext t : ctx.declpair()) {
-                node n2 = visit(t);
-                c.adddecl(n2.getval(), n2.getinfo());
+                declaration n2 = (declaration) visit(t);
+                c.adddecl(n2.gettyp(), n2.getid());
             }
             for (mxParser.FunctionContext f : ctx.function()) {
                 node n2 = visit(f);
@@ -76,17 +76,16 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitConstructor(mxParser.ConstructorContext ctx)
     {
-        node n1 = visit(ctx.Identifier());
+        String n1 = ctx.Identifier().getText();
         node n2 = visit(ctx.expressionblock());
-        funcnode f = new funcnode(n1.getval(), (blocknode)n2);
-        f.settype("");
-        f.settype("");
+        funcnode f = new funcnode(n1, (blocknode)n2);
+        f.settype(new type(""));
         if(ctx.params() != null)
         {
             spnode n3 = (spnode) visit(ctx.params());
             for(node n : n3.retlist)
             {
-                f.addparams(n.getval(), n.getinfo());
+                f.addparams(((declaration) n).gettyp(), new idnode(((declaration) n).getid()));
             }
         }
         return f;
@@ -95,25 +94,25 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitFunction(mxParser.FunctionContext ctx)
     {
-        node n1 = visit(ctx.Identifier());
+        String n1 = ctx.Identifier().getText();
         node n2 = visit(ctx.expressionblock());
-        funcnode f = new funcnode(n1.getval(), (blocknode)n2);
+        funcnode f = new funcnode(n1, (blocknode)n2);
         if(ctx.params() != null)
         {
             spnode n3 = (spnode) visit(ctx.params());
             for(node n : n3.retlist)
             {
-                f.addparams(n.getval(), n.getinfo());
+                f.addparams(((declaration) n).gettyp(), new idnode(((declaration) n).getid()));
             }
         }
         if(ctx.typename() == null)
         {
-            f.settype("Void");
+            f.settype(new type("Void"));
         }
         else
         {
             node n4 = visit(ctx.typename());
-            f.settype(n4.getval());
+            f.settype((type) n4);
         }
         return f;
     }
@@ -127,7 +126,7 @@ class ASTtraverse extends mxBaseVisitor<node>
             for(mxParser.DeclpairContext t: ctx.declpair())
             {
                 node n = visit(t);
-                s.retlist.add(new declaration(n.getval(), new idnode(n.getinfo())));
+                s.retlist.add(new declaration(((declaration)n).gettyp(), new idnode(((declaration) n).getid())));
             }
         }
         return s;
@@ -221,10 +220,9 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitDeclpair(mxParser.DeclpairContext ctx)
     {
-        node n = visit(ctx.typename());
-        String s1 = ((type) n).tostring();
-        String s2 = ctx.Identifier().getText();
-        return new declaration(s1, new idnode(s2));
+        node n1 = visit(ctx.typename());
+        String n2 = ctx.Identifier().getText();
+        return new declaration((type) n1, new idnode(n2));
     }
 
     @Override
@@ -481,9 +479,7 @@ class ASTtraverse extends mxBaseVisitor<node>
     {
         if(ctx.Identifier() != null)
         {
-            idnode i = new idnode(ctx.Identifier().getText());
-            i.setval(i.getid());
-            return i;
+            return new idnode(ctx.Identifier().getText());
         }
         if(ctx.This() != null)
         {
@@ -491,9 +487,7 @@ class ASTtraverse extends mxBaseVisitor<node>
         }
         if(ctx.Constant() != null)
         {
-            constnode c =  new constnode(ctx.Constant().getText());
-            c.setval(c.getconst());
-            return c;
+            return new constnode(ctx.Constant().getText());
         }
         else return new emptynode();
     }

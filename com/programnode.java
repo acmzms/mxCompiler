@@ -13,6 +13,7 @@ class programnode extends node
     {
         classdecls = new ArrayList<>();
         funcdecls = new ArrayList<>();
+        declnodes = new ArrayList<>();
         field = new scope(this);
     }
     public void addclass(classnode c) { classdecls.add(c); }
@@ -21,5 +22,5 @@ class programnode extends node
     public ArrayList<classnode> retclass() {return classdecls;}
     public ArrayList<funcnode> retfunc() {return funcdecls;}
     public ArrayList<declaration> retdecl() {return declnodes;}
-    public void addvar(String t, idnode id) throws Exception { field.addvar(t, id); }
+    public void addvar(type t, idnode id) throws Exception { field.addvar(t, id); }
 }

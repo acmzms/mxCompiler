@@ -16,7 +16,7 @@ class scope
         s.father = this;
         this.children.add(s);
     }
-    public void addvar(String t, idnode a) throws Exception
+    public void addvar(type t, idnode a) throws Exception
     {
         if(!vars.containsKey(a)){vars.put(new idnode(a), new type(t));}
         else {throw new Exception("error 1 : redefinition");}

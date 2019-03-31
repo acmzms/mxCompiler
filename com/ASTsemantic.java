@@ -18,10 +18,12 @@ class ASTsemantic {
 
     public boolean exist(String s)
     {
-        if (s.equals("int") || s.equals("bool") || s.equals("String") || s.equals("void")) {
+        if (s.equals("int") || s.equals("bool") || s.equals("String") || s.equals("void"))
+        {
             return true;
         }
-        if (classnames.containsKey(s)) {
+        if (classnames.containsKey(s))
+        {
             return true;
         }
         return false;
@@ -29,16 +31,22 @@ class ASTsemantic {
 
     public ArrayList<declaration> readdecl(node n, String name)
     {
-        if (n instanceof programnode) {
-            for (int i = 0; i < ((programnode) n).retfunc().size(); i++) {
-                if (((programnode) n).retfunc().get(i).getname().equals(name)) {
+        if (n instanceof programnode)
+        {
+            for (int i = 0; i < ((programnode) n).retfunc().size(); i++)
+            {
+                if (((programnode) n).retfunc().get(i).getname().equals(name))
+                {
                     return ((programnode) n).retfunc().get(i).getparams();
                 }
             }
         }
-        if (n instanceof classnode) {
-            for (int i = 0; i < ((classnode) n).retfunc().size(); i++) {
-                if (((classnode) n).retfunc().get(i).getname().equals(name)) {
+        if (n instanceof classnode)
+        {
+            for (int i = 0; i < ((classnode) n).retfunc().size(); i++)
+            {
+                if (((classnode) n).retfunc().get(i).getname().equals(name))
+                {
                     return ((classnode) n).retfunc().get(i).getparams();
                 }
             }
@@ -46,23 +54,29 @@ class ASTsemantic {
         return new ArrayList<>();
     }
 
-    public String readtype(node n, String name)
+    public type readtype(node n, String name)
     {
-        if (n instanceof programnode) {
-            for (int i = 0; i < ((programnode) n).retfunc().size(); i++) {
-                if (((programnode) n).retfunc().get(i).getname().equals(name)) {
+        if (n instanceof programnode)
+        {
+            for (int i = 0; i < ((programnode) n).retfunc().size(); i++)
+            {
+                if (((programnode) n).retfunc().get(i).getname().equals(name))
+                {
                     return ((programnode) n).retfunc().get(i).gettype();
                 }
             }
         }
-        if (n instanceof classnode) {
-            for (int i = 0; i < ((classnode) n).retfunc().size(); i++) {
-                if (((classnode) n).retfunc().get(i).getname().equals(name)) {
+        if (n instanceof classnode)
+        {
+            for (int i = 0; i < ((classnode) n).retfunc().size(); i++)
+            {
+                if (((classnode) n).retfunc().get(i).getname().equals(name))
+                {
                     return ((classnode) n).retfunc().get(i).gettype();
                 }
             }
         }
-        return new String();
+        return new type();
     }
 
     public void acceptProgramnode(programnode n) throws Exception
@@ -83,7 +97,7 @@ class ASTsemantic {
         }
         for(int i = 0;i < n.retdecl().size();i++)
         {
-            if(!exist(n.retdecl().get(i).gettyp())){throw new Exception("Error 4 : undefined class");}
+            if(!exist(n.retdecl().get(i).gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
             n.accfield().addvar(n.retdecl().get(i).gettyp(), new idnode(n.retdecl().get(i).getid()));
         }
         if(!b) {throw new Exception("error 0 : no main");}
@@ -98,19 +112,19 @@ class ASTsemantic {
         {
             acceptFuncnode(n.retfunc().get(i));
             a.add(n.retfunc().get(i).getname());
-            if(n.retfunc().get(i).gettype().equals(""))
+            if(n.retfunc().get(i).gettype().gettypename().equals(""))
             {if(!n.retfunc().get(i).getname().equals(n.getclassname().getid())){throw new Exception("error 2 : wrong constructor name");}}
         }
         classnames.put(n.getclassname().getid(), a);
         for(int i = 0;i < n.retdecl().size();i++)
         {
             declaration d = n.retdecl().get(i);
-            if(!exist(d.gettyp())){throw new Exception("Error 4 : undefined class");}
+            if(!exist(d.gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
             n.accfield().addvar(d.gettyp(), new idnode (d.getid()));
         }
         for(int i = 0;i < n.retdecl().size();i++)
         {
-            if(!exist(n.retdecl().get(i).gettyp())){throw new Exception("Error 4 : undefined class");}
+            if(!exist(n.retdecl().get(i).gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
             n.accfield().addvar(n.retdecl().get(i).gettyp(), new idnode(n.retdecl().get(i).getid()));
         }
         currentscope.pop();
@@ -132,7 +146,7 @@ class ASTsemantic {
         {
             declaration d = n.getparams().get(i);
             //a.add(d);
-            if(!exist(d.gettyp())){throw new Exception("Error 4 : undefined class");}
+            if(!exist(d.gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
             b.accfield().addvar(d.gettyp(), new idnode(d.getid()));
         }
         //currentscope.peek().getf().put(n.getname(), a);
@@ -149,7 +163,7 @@ class ASTsemantic {
         for(int i = 0;i < n.getcondits().size();i++) {acceptCondnode(n.getcondits().get(i));}
         for(int i = 0;i < n.getdecls().size();i++)
         {
-            if(!exist(n.getdecls().get(i).gettyp())){throw new Exception("Error 4 : undefined class");}
+            if(!exist(n.getdecls().get(i).gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
             n.accfield().addvar(n.getdecls().get(i).gettyp(), new idnode(n.getdecls().get(i).getid()));
         }
         currentscope.pop();
@@ -224,12 +238,12 @@ class ASTsemantic {
                 if(root.retclass().get(i).getclassname().getid().equals(s))
                 {
                     ArrayList<declaration> d = readdecl(root.retclass().get(i), t.gettypename());
-                    String r = readtype(root.retclass().get(i), t.gettypename());
+                    type r = readtype(root.retclass().get(i), t.gettypename());
                     for(int j = 0;j < n.getargs().size();j++)
                     {
                         if(!d.get(j).gettyp().equals(n.getargs().get(j))) {throw new Exception("error 4 : params mismatch");}
                     }
-                    return new type(r);
+                    return r;
                 }
             }
         }
@@ -237,12 +251,12 @@ class ASTsemantic {
         {
             idnode m = (idnode) c;
             ArrayList<declaration> d = readdecl(root, ((idnode) c).getid());
-            String r = readtype(root, ((idnode) c).getid());
+            type r = readtype(root, ((idnode) c).getid());
             for(int i = 0;i < n.getargs().size();i++)
             {
                 if(!d.get(i).gettyp().equals(n.getargs().get(i))) {throw new Exception("error 4 : params mismatch");}
             }
-            return new type(r);
+            return r;
         }
         return new type();
     }

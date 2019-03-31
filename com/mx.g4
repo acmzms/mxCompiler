@@ -130,7 +130,7 @@ loop
 
 control
     : Return calculation?            # retstmt
-    | Continue                       # continue
+    | Continue                       # covisitntinue
     | Break                          # break
     ;
 
