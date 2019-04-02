@@ -6,7 +6,7 @@ class scope
 {
     private node nodeptr;
     private ArrayList <scope> children;
-    private HashMap <idnode, type> vars;
+    private HashMap <String, type> vars;
     private scope father;
     public scope() {children = new ArrayList<>();vars = new HashMap<>();}
     public scope(scope f) {father = f;children = new ArrayList<>();vars = new HashMap<>();}
@@ -16,12 +16,13 @@ class scope
         s.father = this;
         this.children.add(s);
     }
-    public void addvar(type t, idnode a) throws Exception
+    public void addvar(type t, idnode j) throws Exception
     {
-        if(!vars.containsKey(a)){vars.put(new idnode(a), new type(t));}
+        String a = j.getid();
+        if(!vars.containsKey(a)){vars.put(a, new type(t));}
         else {throw new Exception("error 1 : redefinition");}
         //if(t)
     }
-    public HashMap <idnode, type> getvar() {return vars;}
+    public HashMap <String, type> getvar() {return vars;}
     public node retptr() {return nodeptr;}
 }

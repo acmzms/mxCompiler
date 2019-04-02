@@ -1537,20 +1537,20 @@ public class mxParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class ContinueContext extends ControlContext {
+	public static class CovisitntinueContext extends ControlContext {
 		public TerminalNode Continue() { return getToken(mxParser.Continue, 0); }
-		public ContinueContext(ControlContext ctx) { copyFrom(ctx); }
+		public CovisitntinueContext(ControlContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof mxListener ) ((mxListener)listener).enterContinue(this);
+			if ( listener instanceof mxListener ) ((mxListener)listener).enterCovisitntinue(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof mxListener ) ((mxListener)listener).exitContinue(this);
+			if ( listener instanceof mxListener ) ((mxListener)listener).exitCovisitntinue(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof mxVisitor ) return ((mxVisitor<? extends T>)visitor).visitContinue(this);
+			if ( visitor instanceof mxVisitor ) return ((mxVisitor<? extends T>)visitor).visitCovisitntinue(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1582,7 +1582,7 @@ public class mxParser extends Parser {
 				}
 				break;
 			case Continue:
-				_localctx = new ContinueContext(_localctx);
+				_localctx = new CovisitntinueContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(208);
@@ -1800,9 +1800,9 @@ public class mxParser extends Parser {
 		}
 	}
 	public static class PrimaryContext extends CalculationContext {
-		public TerminalNode Identifier() { return getToken(mxParser.Identifier, 0); }
-		public TerminalNode This() { return getToken(mxParser.This, 0); }
 		public TerminalNode Constant() { return getToken(mxParser.Constant, 0); }
+		public TerminalNode This() { return getToken(mxParser.This, 0); }
+		public TerminalNode Identifier() { return getToken(mxParser.Identifier, 0); }
 		public PrimaryContext(CalculationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -1950,13 +1950,13 @@ public class mxParser extends Parser {
 				match(T__4);
 				}
 				break;
-			case Identifier:
+			case Constant:
 				{
 				_localctx = new PrimaryContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(237);
-				match(Identifier);
+				match(Constant);
 				}
 				break;
 			case This:
@@ -1968,13 +1968,13 @@ public class mxParser extends Parser {
 				match(This);
 				}
 				break;
-			case Constant:
+			case Identifier:
 				{
 				_localctx = new PrimaryContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(239);
-				match(Constant);
+				match(Identifier);
 				}
 				break;
 			default:
@@ -2404,8 +2404,8 @@ public class mxParser extends Parser {
 		"\u00e5\7\n\2\2\u00e5\u00e7\7\13\2\2\u00e6\u00e4\3\2\2\2\u00e7\u00ea\3"+
 		"\2\2\2\u00e8\u00e6\3\2\2\2\u00e8\u00e9\3\2\2\2\u00e9\u00f3\3\2\2\2\u00ea"+
 		"\u00e8\3\2\2\2\u00eb\u00ec\7\6\2\2\u00ec\u00ed\5\"\22\2\u00ed\u00ee\7"+
-		"\7\2\2\u00ee\u00f3\3\2\2\2\u00ef\u00f3\7\61\2\2\u00f0\u00f3\7\60\2\2\u00f1"+
-		"\u00f3\7\62\2\2\u00f2\u00d6\3\2\2\2\u00f2\u00d9\3\2\2\2\u00f2\u00eb\3"+
+		"\7\2\2\u00ee\u00f3\3\2\2\2\u00ef\u00f3\7\62\2\2\u00f0\u00f3\7\60\2\2\u00f1"+
+		"\u00f3\7\61\2\2\u00f2\u00d6\3\2\2\2\u00f2\u00d9\3\2\2\2\u00f2\u00eb\3"+
 		"\2\2\2\u00f2\u00ef\3\2\2\2\u00f2\u00f0\3\2\2\2\u00f2\u00f1\3\2\2\2\u00f3"+
 		"\u0127\3\2\2\2\u00f4\u00f5\f\21\2\2\u00f5\u00f6\t\3\2\2\u00f6\u0126\5"+
 		"\"\22\22\u00f7\u00f8\f\20\2\2\u00f8\u00f9\t\4\2\2\u00f9\u0126\5\"\22\21"+

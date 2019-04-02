@@ -212,17 +212,17 @@ public interface mxListener extends ParseTreeListener {
 	 */
 	void exitRetstmt(mxParser.RetstmtContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code continue}
+	 * Enter a parse tree produced by the {@code covisitntinue}
 	 * labeled alternative in {@link mxParser#control}.
 	 * @param ctx the parse tree
 	 */
-	void enterContinue(mxParser.ContinueContext ctx);
+	void enterCovisitntinue(mxParser.CovisitntinueContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code continue}
+	 * Exit a parse tree produced by the {@code covisitntinue}
 	 * labeled alternative in {@link mxParser#control}.
 	 * @param ctx the parse tree
 	 */
-	void exitContinue(mxParser.ContinueContext ctx);
+	void exitCovisitntinue(mxParser.CovisitntinueContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code break}
 	 * labeled alternative in {@link mxParser#control}.

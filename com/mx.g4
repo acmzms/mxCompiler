@@ -153,9 +153,9 @@ calculation
     | lhs = calculation op = '||' rhs = calculation                               # binary
     | <assoc = right> lhs = calculation '=' rhs = calculation                     # assign
     | '(' calculation ')'                                                         # subexpr
-    | Identifier                                                                  # primary
-    | This                                                                        # primary
     | Constant                                                                    # primary
+    | This                                                                        # primary
+    | Identifier                                                                  # primary
     ;
 
 //.............................................skip.........................................

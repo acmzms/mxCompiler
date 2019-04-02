@@ -135,6 +135,13 @@ class ASTsemantic {
     {
         //ArrayList<declaration> a = new ArrayList<>();
         blocknode b = n.getblock();
+        for(int i = 0;i < n.getparams().size();i++)
+        {
+            declaration d = n.getparams().get(i);
+            //a.add(d);
+            if(!exist(d.gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
+            b.accfield().addvar(d.gettyp(), new idnode(d.getid()));
+        }
         acceptBlocknode(b);
         for(int i = 0;i < b.getctrls().size();i++)
         {
@@ -146,18 +153,12 @@ class ASTsemantic {
                 }
                 else if(!((retnode) b.getctrls().get(i)).getr().gettype().gettypename().equals(n.gettype().gettypename()))
                 {
-                    int j = 0;
+                    //int j = 0;
                     throw new Exception(("error 3 : wrong return type"));
                 }
             }
         }
-        for(int i = 0;i < n.getparams().size();i++)
-        {
-            declaration d = n.getparams().get(i);
-            //a.add(d);
-            if(!exist(d.gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
-            b.accfield().addvar(d.gettyp(), new idnode(d.getid()));
-        }
+
         //currentscope.peek().getf().put(n.getname(), a);
         funcnames.add(n.getname());
     }
@@ -211,7 +212,7 @@ class ASTsemantic {
     public void acceptCtrlnode(ctrlnode n) throws Exception
     {
         if(n instanceof retnode)
-        {acceptCalcnode(((retnode) n).getr());}
+        {if(((retnode) n).getr() != null) {acceptCalcnode(((retnode) n).getr());}}
         else
         {
             if(looplevel == 0){throw new Exception("error 9 : stray break or continue");}
