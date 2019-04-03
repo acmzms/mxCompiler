@@ -244,13 +244,13 @@ public class mxBaseListener implements mxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCovisitntinue(mxParser.CovisitntinueContext ctx) { }
+	@Override public void enterContinue(mxParser.ContinueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCovisitntinue(mxParser.CovisitntinueContext ctx) { }
+	@Override public void exitContinue(mxParser.ContinueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -19,7 +19,7 @@ class ASTsemantic {
 
     public boolean exist(String s)
     {
-        if (s.equals("int") || s.equals("bool") || s.equals("String") || s.equals("void"))
+        if (s.equals("int") || s.equals("bool") || s.equals("string") || s.equals("void"))
         {
             return true;
         }
@@ -142,41 +142,64 @@ class ASTsemantic {
             if(!exist(d.gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
             b.accfield().addvar(d.gettyp(), new idnode(d.getid()));
         }
-        acceptBlocknode(b);
-        for(int i = 0;i < b.getctrls().size();i++)
+        type cmp1 = acceptBlocknode(b);
+        type cmp2 = n.gettype();
+        if(cmp1.isequal(new type("null")))
         {
-            if(b.getctrls().get(i) instanceof retnode)
-            {
-                if(((retnode) b.getctrls().get(i)).getr() == null)
-                {
-                    if(!n.gettype().gettypename().equals("void")) {throw new Exception(("error 3 : wrong return type"));}
-                }
-                else if(!((retnode) b.getctrls().get(i)).getr().gettype().gettypename().equals(n.gettype().gettypename()))
-                {
-                    //int j = 0;
-                    throw new Exception(("error 3 : wrong return type"));
-                }
-            }
+            if(cmp2.isequal(new type("int")) || cmp2.isequal(new type("void")) || cmp2.isequal(new type("string")))
+            {throw new Exception(("error 3 : wrong return type"));}
         }
-
+        if(cmp1.isequal(new type("")))
+        {
+            if(!(cmp2.isequal(new type("int")) || cmp2.isequal(new type("void"))))
+            {throw new Exception(("error 3 : wrong return type"));}
+        }
+        else if(!cmp1.isequal(cmp2)) {throw new Exception(("error 3 : wrong return type"));}
         //currentscope.peek().getf().put(n.getname(), a);
         funcnames.add(n.getname());
     }
 
-    public void acceptBlocknode(blocknode n) throws Exception
+    public type acceptBlocknode(blocknode n) throws Exception
     {
         currentscope.push(n.accfield());
-        for(int i = 0;i < n.getnestblock().size();i++) {acceptBlocknode(n.getnestblock().get(i));}
-        for(int i = 0;i < n.getcalcs().size();i++) {acceptCalcnode(n.getcalcs().get(i));}
-        for(int i = 0;i < n.getctrls().size();i++) {acceptCtrlnode(n.getctrls().get(i));}
-        for(int i = 0;i < n.getloops().size();i++) {acceptLoopnode(n.getloops().get(i));}
-        for(int i = 0;i < n.getcondits().size();i++) {acceptCondnode(n.getcondits().get(i));}
+        type t = new type();
+        for(int i = 0;i < n.getnestblock().size();i++)
+        {acceptBlocknode(n.getnestblock().get(i));}
+        for(int i = 0;i < n.getcalcs().size();i++)
+        {acceptCalcnode(n.getcalcs().get(i));}
+        for(int i = 0;i < n.getctrls().size();i++)
+        {
+            type tmp = acceptCtrlnode(n.getctrls().get(i));
+            if(t.isequal(new type(""))) {t = tmp;}
+            if(t.isequal(new type("null")))
+            {
+                if(tmp.isequal(new type("int")) || tmp.isequal(new type("void"))) {throw new Exception(("error 3 : wrong return type"));}
+                else {t = tmp;}
+            }
+            if(t.isequal(new type("int")))
+            {
+                if(!(tmp.isequal(new type("int")) || tmp.isequal(new type("")))) {throw new Exception(("error 3 : wrong return type"));}
+            }
+            if(t.isequal(new type("string")))
+            {
+                if(!(tmp.isequal(new type("string")))) {throw new Exception(("error 3 : wrong return type"));}
+            }
+            else if(!tmp.isequal(new type("null")))
+            {
+                if(!t.isequal(tmp)) {throw new Exception(("error 3 : wrong return type"));}
+            }
+        }
+        for(int i = 0;i < n.getloops().size();i++)
+        {acceptLoopnode(n.getloops().get(i));}
+        for(int i = 0;i < n.getcondits().size();i++)
+        {acceptCondnode(n.getcondits().get(i));}
         for(int i = 0;i < n.getdecls().size();i++)
         {
             if(!exist(n.getdecls().get(i).gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
             n.accfield().addvar(n.getdecls().get(i).gettyp(), new idnode(n.getdecls().get(i).getid()));
         }
         currentscope.pop();
+        return t;
     }
 
     public void acceptCondnode(condnode n) throws Exception
@@ -209,46 +232,53 @@ class ASTsemantic {
         looplevel--;
     }
 
-    public void acceptCtrlnode(ctrlnode n) throws Exception
+    public type acceptCtrlnode(ctrlnode n) throws Exception
     {
         if(n instanceof retnode)
-        {if(((retnode) n).getr() != null) {acceptCalcnode(((retnode) n).getr());}}
+        {
+            if(((retnode) n).getr() != null)
+            {
+                return acceptCalcnode(((retnode) n).getr());
+            }
+        }
         else
         {
             if(looplevel == 0){throw new Exception("error 9 : stray break or continue");}
         }
+        return new type();
     }
 
     public type acceptCalcnode(calcnode n) throws Exception
     {
         type t = new type();
         if(n instanceof funccallnode)
-        {t = acceptFunccallnode((funccallnode) n); n.settype(t);}
+        {t = acceptFunccallnode((funccallnode) n);}
         if(n instanceof subscriptnode)
-        {t = acceptSubscriptnode((subscriptnode) n); n.settype(t);}
+        {t = acceptSubscriptnode((subscriptnode) n);}
         if(n instanceof prefixnode)
-        {t = acceptPrefixnode((prefixnode) n); n.settype(t);}
+        {t = acceptPrefixnode((prefixnode) n);}
         if(n instanceof newnode)
-        {t = acceptNewnode((newnode) n); n.settype(t);}
+        {t = acceptNewnode((newnode) n);}
         if(n instanceof binarynode)
-        {t = acceptBinarynode((binarynode) n); n.settype(t);}
+        {t = acceptBinarynode((binarynode) n);}
         if(n instanceof memaccessnode)
-        {t = acceptMemaccessnode((memaccessnode) n); n.settype(t);}
+        {t = acceptMemaccessnode((memaccessnode) n);}
         if(n instanceof idnode)
-        {t = acceptIdentifier((idnode) n); n.settype(t);}
+        {t = acceptIdentifier((idnode) n);}
         if(n instanceof assignnode)
-        {t = acceptAssignnode((assignnode) n); n.settype(t);}
+        {t = acceptAssignnode((assignnode) n);}
         if(n instanceof constnode)
-        {t = acceptConstant((constnode) n); n.settype(t);}
+        {t = acceptConstant((constnode) n);}
         if(n instanceof thisnode)
-        {t = acceptThis((thisnode)n ); n.settype(t);}
+        {t = acceptThis((thisnode)n );}
         if(n instanceof suffixnode)
-        {t = acceptSuffixnode((suffixnode) n); n.settype(t);}
+        {t = acceptSuffixnode((suffixnode) n);}
         return t;
     }
 
     public type acceptFunccallnode(funccallnode n) throws Exception
     {
+        n.setleft(false);
         calcnode c = n.getf();
         type t = acceptCalcnode(c);
         if(c instanceof memaccessnode)
@@ -263,7 +293,8 @@ class ASTsemantic {
                     type r = readtype(root.retclass().get(i), t.gettypename());
                     for(int j = 0;j < n.getargs().size();j++)
                     {
-                        if(!d.get(j).gettyp().equals(n.getargs().get(j).gettype())) {throw new Exception("error 4 : params mismatch");}
+                        type q = acceptCalcnode(n.getargs().get(j));
+                        if(!d.get(j).gettyp().isequal(q)) {throw new Exception("error 4 : params mismatch");}
                     }
                     return r;
                 }
@@ -276,7 +307,8 @@ class ASTsemantic {
             type r = readtype(root, ((idnode) c).getid());
             for(int i = 0;i < n.getargs().size();i++)
             {
-                if(!d.get(i).gettyp().equals(n.getargs().get(i).gettype())) {throw new Exception("error 4 : params mismatch");}
+                type p = acceptCalcnode(n.getargs().get(i));
+                if(!d.get(i).gettyp().isequal(p)) {throw new Exception("error 4 : params mismatch");}
             }
             return r;
         }
@@ -294,11 +326,14 @@ class ASTsemantic {
 
     public type acceptMemaccessnode(memaccessnode n) throws Exception
     {
+        //n.setleft(false);
         String id = ((idnode) n.retid()).getid();
-        String f = n.retf().getid();
+        //String f = n.retf().getid();
         if(!classnames.containsKey(id)) {throw new Exception("error 4 : undefined class");}
         acceptCalcnode(n.retid());
         type t = acceptIdentifier(n.retf());
+        if(t.gettypename().equals("id")) {n.setleft(false);}
+        else {n.setleft(true);}
         return t;
     }
 
@@ -330,7 +365,7 @@ class ASTsemantic {
 
     public type acceptBinarynode(binarynode n) throws Exception
     {
-        n.setleft(false);                    int j = 0;
+        n.setleft(false);
         type t1 = acceptCalcnode(n.getlval());
         type t2 = acceptCalcnode(n.getrval());
         if(!t1.isequal(t2)) {throw new Exception("Error 6 : wrong expression type");}
@@ -355,12 +390,16 @@ class ASTsemantic {
 
     public type acceptIdentifier(idnode n) throws Exception
     {
+        n.setleft(true);
         String s = n.getid();
         type t = new type("id");
         if(classnames.containsKey(s) || funcnames.contains(s)) {return t;}
-        if(currentscope.peek().getvar().containsKey(s)) {t = currentscope.peek().getvar().get(s);}
-        else {throw new Exception("Error 5 : undefined variable");}
-        n.setleft(true);
+        boolean flag = false;
+        for(scope sr : currentscope)
+        {
+            if(sr.getvar().containsKey(s)) {t = currentscope.peek().getvar().get(s); flag = true;}
+        }
+        if(!flag){throw new Exception("Error 5 : undefined variable");}
         if(t.gettypename().equals("void")) {throw new Exception("Error 6 : void expression");}
         return t;
     }

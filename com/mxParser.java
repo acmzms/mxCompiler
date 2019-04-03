@@ -23,7 +23,7 @@ public class mxParser extends Parser {
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
 		T__31=32, Bool=33, Int=34, String=35, Void=36, If=37, Else=38, For=39, 
 		While=40, Break=41, Continue=42, Return=43, New=44, Class=45, This=46, 
-		Identifier=47, Constant=48, Spaces=49, Newline=50, Linecomment=51, Blockcomment=52;
+		Constant=47, Identifier=48, Spaces=49, Newline=50, Linecomment=51, Blockcomment=52;
 	public static final int
 		RULE_program = 0, RULE_code = 1, RULE_declclass = 2, RULE_constructor = 3, 
 		RULE_function = 4, RULE_params = 5, RULE_call = 6, RULE_expressionblock = 7, 
@@ -56,7 +56,7 @@ public class mxParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, "Bool", "Int", 
 			"String", "Void", "If", "Else", "For", "While", "Break", "Continue", 
-			"Return", "New", "Class", "This", "Identifier", "Constant", "Spaces", 
+			"Return", "New", "Class", "This", "Constant", "Identifier", "Spaces", 
 			"Newline", "Linecomment", "Blockcomment"
 		};
 	}
@@ -671,7 +671,7 @@ public class mxParser extends Parser {
 			setState(106);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << T__1) | (1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << Bool) | (1L << Int) | (1L << String) | (1L << If) | (1L << For) | (1L << While) | (1L << Break) | (1L << Continue) | (1L << Return) | (1L << New) | (1L << This) | (1L << Identifier) | (1L << Constant))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << T__1) | (1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << Bool) | (1L << Int) | (1L << String) | (1L << If) | (1L << For) | (1L << While) | (1L << Break) | (1L << Continue) | (1L << Return) | (1L << New) | (1L << This) | (1L << Constant) | (1L << Identifier))) != 0)) {
 				{
 				{
 				setState(103);
@@ -1128,8 +1128,8 @@ public class mxParser extends Parser {
 			case T__15:
 			case New:
 			case This:
-			case Identifier:
 			case Constant:
+			case Identifier:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(148);
@@ -1385,7 +1385,7 @@ public class mxParser extends Parser {
 				setState(177);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Identifier) | (1L << Constant))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Constant) | (1L << Identifier))) != 0)) {
 					{
 					setState(176);
 					((ForstmtContext)_localctx).init = calculation(0);
@@ -1397,7 +1397,7 @@ public class mxParser extends Parser {
 				setState(181);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Identifier) | (1L << Constant))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Constant) | (1L << Identifier))) != 0)) {
 					{
 					setState(180);
 					((ForstmtContext)_localctx).quit = calculation(0);
@@ -1409,7 +1409,7 @@ public class mxParser extends Parser {
 				setState(185);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Identifier) | (1L << Constant))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Constant) | (1L << Identifier))) != 0)) {
 					{
 					setState(184);
 					((ForstmtContext)_localctx).incr = calculation(0);
@@ -1447,7 +1447,7 @@ public class mxParser extends Parser {
 				setState(195);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Identifier) | (1L << Constant))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Constant) | (1L << Identifier))) != 0)) {
 					{
 					setState(194);
 					calculation(0);
@@ -1537,20 +1537,20 @@ public class mxParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class CovisitntinueContext extends ControlContext {
+	public static class ContinueContext extends ControlContext {
 		public TerminalNode Continue() { return getToken(mxParser.Continue, 0); }
-		public CovisitntinueContext(ControlContext ctx) { copyFrom(ctx); }
+		public ContinueContext(ControlContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof mxListener ) ((mxListener)listener).enterCovisitntinue(this);
+			if ( listener instanceof mxListener ) ((mxListener)listener).enterContinue(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof mxListener ) ((mxListener)listener).exitCovisitntinue(this);
+			if ( listener instanceof mxListener ) ((mxListener)listener).exitContinue(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof mxVisitor ) return ((mxVisitor<? extends T>)visitor).visitCovisitntinue(this);
+			if ( visitor instanceof mxVisitor ) return ((mxVisitor<? extends T>)visitor).visitContinue(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1572,7 +1572,7 @@ public class mxParser extends Parser {
 				setState(206);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Identifier) | (1L << Constant))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Constant) | (1L << Identifier))) != 0)) {
 					{
 					setState(205);
 					calculation(0);
@@ -1582,7 +1582,7 @@ public class mxParser extends Parser {
 				}
 				break;
 			case Continue:
-				_localctx = new CovisitntinueContext(_localctx);
+				_localctx = new ContinueContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(208);
@@ -2237,7 +2237,7 @@ public class mxParser extends Parser {
 						setState(288);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
-						if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Identifier) | (1L << Constant))) != 0)) {
+						if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << New) | (1L << This) | (1L << Constant) | (1L << Identifier))) != 0)) {
 							{
 							setState(287);
 							call();
@@ -2352,24 +2352,24 @@ public class mxParser extends Parser {
 		"\u00d4\3\2\2\2\"\u00f2\3\2\2\2$&\5\4\3\2%$\3\2\2\2&)\3\2\2\2\'%\3\2\2"+
 		"\2\'(\3\2\2\2(*\3\2\2\2)\'\3\2\2\2*+\7\2\2\3+\3\3\2\2\2,\60\5\6\4\2-\60"+
 		"\5\n\6\2.\60\5\24\13\2/,\3\2\2\2/-\3\2\2\2/.\3\2\2\2\60\5\3\2\2\2\61\62"+
-		"\7/\2\2\62\63\7\61\2\2\63;\7\3\2\2\64\65\5\26\f\2\65\66\7\4\2\2\66:\3"+
+		"\7/\2\2\62\63\7\62\2\2\63;\7\3\2\2\64\65\5\26\f\2\65\66\7\4\2\2\66:\3"+
 		"\2\2\2\67:\5\n\6\28:\5\b\5\29\64\3\2\2\29\67\3\2\2\298\3\2\2\2:=\3\2\2"+
-		"\2;9\3\2\2\2;<\3\2\2\2<>\3\2\2\2=;\3\2\2\2>?\7\5\2\2?\7\3\2\2\2@A\7\61"+
+		"\2;9\3\2\2\2;<\3\2\2\2<>\3\2\2\2=;\3\2\2\2>?\7\5\2\2?\7\3\2\2\2@A\7\62"+
 		"\2\2AC\7\6\2\2BD\5\f\7\2CB\3\2\2\2CD\3\2\2\2DE\3\2\2\2EF\7\7\2\2FG\5\20"+
 		"\t\2G\t\3\2\2\2HK\5\30\r\2IK\7&\2\2JH\3\2\2\2JI\3\2\2\2KL\3\2\2\2LM\7"+
-		"\61\2\2MO\7\6\2\2NP\5\f\7\2ON\3\2\2\2OP\3\2\2\2PQ\3\2\2\2QR\7\7\2\2RS"+
+		"\62\2\2MO\7\6\2\2NP\5\f\7\2ON\3\2\2\2OP\3\2\2\2PQ\3\2\2\2QR\7\7\2\2RS"+
 		"\5\20\t\2S\13\3\2\2\2TU\5\26\f\2UV\7\b\2\2VX\3\2\2\2WT\3\2\2\2X[\3\2\2"+
 		"\2YW\3\2\2\2YZ\3\2\2\2Z\\\3\2\2\2[Y\3\2\2\2\\]\5\26\f\2]\r\3\2\2\2^_\5"+
 		"\"\22\2_`\7\b\2\2`b\3\2\2\2a^\3\2\2\2be\3\2\2\2ca\3\2\2\2cd\3\2\2\2df"+
 		"\3\2\2\2ec\3\2\2\2fg\5\"\22\2g\17\3\2\2\2hl\7\3\2\2ik\5\22\n\2ji\3\2\2"+
 		"\2kn\3\2\2\2lj\3\2\2\2lm\3\2\2\2mo\3\2\2\2nl\3\2\2\2op\7\5\2\2p\21\3\2"+
 		"\2\2qt\5\32\16\2rt\5\24\13\2sq\3\2\2\2sr\3\2\2\2t\23\3\2\2\2uv\5\26\f"+
-		"\2vw\7\4\2\2w\u0082\3\2\2\2xy\5\26\f\2y}\7\t\2\2z~\5\"\22\2{~\7\61\2\2"+
-		"|~\7\62\2\2}z\3\2\2\2}{\3\2\2\2}|\3\2\2\2~\177\3\2\2\2\177\u0080\7\4\2"+
+		"\2vw\7\4\2\2w\u0082\3\2\2\2xy\5\26\f\2y}\7\t\2\2z~\5\"\22\2{~\7\62\2\2"+
+		"|~\7\61\2\2}z\3\2\2\2}{\3\2\2\2}|\3\2\2\2~\177\3\2\2\2\177\u0080\7\4\2"+
 		"\2\u0080\u0082\3\2\2\2\u0081u\3\2\2\2\u0081x\3\2\2\2\u0082\25\3\2\2\2"+
-		"\u0083\u0084\5\30\r\2\u0084\u0085\7\61\2\2\u0085\27\3\2\2\2\u0086\u0087"+
+		"\u0083\u0084\5\30\r\2\u0084\u0085\7\62\2\2\u0085\27\3\2\2\2\u0086\u0087"+
 		"\b\r\1\2\u0087\u008c\7$\2\2\u0088\u008c\7#\2\2\u0089\u008c\7%\2\2\u008a"+
-		"\u008c\7\61\2\2\u008b\u0086\3\2\2\2\u008b\u0088\3\2\2\2\u008b\u0089\3"+
+		"\u008c\7\62\2\2\u008b\u0086\3\2\2\2\u008b\u0088\3\2\2\2\u008b\u0089\3"+
 		"\2\2\2\u008b\u008a\3\2\2\2\u008c\u0092\3\2\2\2\u008d\u008e\f\7\2\2\u008e"+
 		"\u008f\7\n\2\2\u008f\u0091\7\13\2\2\u0090\u008d\3\2\2\2\u0091\u0094\3"+
 		"\2\2\2\u0092\u0090\3\2\2\2\u0092\u0093\3\2\2\2\u0093\31\3\2\2\2\u0094"+
@@ -2404,8 +2404,8 @@ public class mxParser extends Parser {
 		"\u00e5\7\n\2\2\u00e5\u00e7\7\13\2\2\u00e6\u00e4\3\2\2\2\u00e7\u00ea\3"+
 		"\2\2\2\u00e8\u00e6\3\2\2\2\u00e8\u00e9\3\2\2\2\u00e9\u00f3\3\2\2\2\u00ea"+
 		"\u00e8\3\2\2\2\u00eb\u00ec\7\6\2\2\u00ec\u00ed\5\"\22\2\u00ed\u00ee\7"+
-		"\7\2\2\u00ee\u00f3\3\2\2\2\u00ef\u00f3\7\62\2\2\u00f0\u00f3\7\60\2\2\u00f1"+
-		"\u00f3\7\61\2\2\u00f2\u00d6\3\2\2\2\u00f2\u00d9\3\2\2\2\u00f2\u00eb\3"+
+		"\7\2\2\u00ee\u00f3\3\2\2\2\u00ef\u00f3\7\61\2\2\u00f0\u00f3\7\60\2\2\u00f1"+
+		"\u00f3\7\62\2\2\u00f2\u00d6\3\2\2\2\u00f2\u00d9\3\2\2\2\u00f2\u00eb\3"+
 		"\2\2\2\u00f2\u00ef\3\2\2\2\u00f2\u00f0\3\2\2\2\u00f2\u00f1\3\2\2\2\u00f3"+
 		"\u0127\3\2\2\2\u00f4\u00f5\f\21\2\2\u00f5\u00f6\t\3\2\2\u00f6\u0126\5"+
 		"\"\22\22\u00f7\u00f8\f\20\2\2\u00f8\u00f9\t\4\2\2\u00f9\u0126\5\"\22\21"+
@@ -2418,7 +2418,7 @@ public class mxParser extends Parser {
 		"\u0126\5\"\22\n\u010f\u0110\f\b\2\2\u0110\u0111\7\"\2\2\u0111\u0126\5"+
 		"\"\22\t\u0112\u0113\f\7\2\2\u0113\u0114\7\t\2\2\u0114\u0126\5\"\22\7\u0115"+
 		"\u0116\f\27\2\2\u0116\u0126\t\b\2\2\u0117\u0118\f\26\2\2\u0118\u0119\7"+
-		"\16\2\2\u0119\u0126\7\61\2\2\u011a\u011b\f\25\2\2\u011b\u011c\7\n\2\2"+
+		"\16\2\2\u0119\u0126\7\62\2\2\u011a\u011b\f\25\2\2\u011b\u011c\7\n\2\2"+
 		"\u011c\u011d\5\"\22\2\u011d\u011e\7\13\2\2\u011e\u0126\3\2\2\2\u011f\u0120"+
 		"\f\24\2\2\u0120\u0122\7\6\2\2\u0121\u0123\5\16\b\2\u0122\u0121\3\2\2\2"+
 		"\u0122\u0123\3\2\2\2\u0123\u0124\3\2\2\2\u0124\u0126\7\7\2\2\u0125\u00f4"+

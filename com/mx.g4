@@ -1,13 +1,13 @@
 grammar mx;
 //options{output = AST;}
 
+fragment True       : 'true';
+fragment False      : 'false';
+fragment Null       : 'null';
 Bool                : 'bool';
 Int                 : 'int';
 String              : 'string';
-fragment Null       : 'null';
 Void                : 'void';
-fragment True       : 'true';
-fragment False      : 'false';
 If                  : 'if';
 Else                : 'else';
 For                 : 'for';
@@ -78,19 +78,18 @@ typename
     | Identifier                            # var
     ;
 
-Identifier
-    :Spchar (Char | Digit)*
-    ;
-
 Constant
     : [1-9][0-9]*
     | '0'
     | '"' Strchar* '"'
-    | Null
     | True
     | False
+    | Null
     ;
 
+Identifier
+    :Spchar (Char | Digit)*
+    ;
 
 fragment Spchar
     :[a-zA-Z]
@@ -130,7 +129,7 @@ loop
 
 control
     : Return calculation?            # retstmt
-    | Continue                       # covisitntinue
+    | Continue                       # continue
     | Break                          # break
     ;
 
