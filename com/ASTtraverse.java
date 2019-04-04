@@ -190,31 +190,31 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitDeclplusassign(mxParser.DeclplusassignContext ctx)
     {
-        spnode s = new spnode();
-        node d1 = visit(ctx.declpair());
-        s.retlist.add(d1);
+
+        declaration d1 = (declaration) visit(ctx.declpair());
+        declaration d2 = new declaration(d1);
         if(ctx.calculation() != null)
         {
             calcnode c = (calcnode)visit(ctx.calculation());
-            s.retlist.add(c);
+            calcnode r = new idnode(((declaration)d1).getid());
+            assignnode a = new assignnode(c, r);
+            d2.seta(a);
         }
         if(ctx.Identifier() != null)
         {
-            String str = ctx.Identifier().getText();
             calcnode r = new idnode(((declaration)d1).getid());
             calcnode l = new idnode(ctx.Identifier().getText());
             assignnode a = new assignnode(l, r);
-            s.retlist.add(a);
+            d2.seta(a);
         }
         if(ctx.Constant() != null)
         {
-            String str = ctx.Identifier().getText();
             calcnode r = new idnode(((declaration)d1).getid());
             calcnode l = new idnode(ctx.Constant().getText());
             assignnode a = new assignnode(l, r);
-            s.retlist.add(a);
+            d2.seta(a);
         }
-        return s;
+        return d2;
     }
 
     @Override

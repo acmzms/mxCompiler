@@ -302,7 +302,7 @@ class ASTsemantic {
         }
         else
         {
-            idnode m = (idnode) c;
+            //idnode m = (idnode) c;
             ArrayList<declaration> d = readdecl(root, ((idnode) c).getid());
             type r = readtype(root, ((idnode) c).getid());
             for(int i = 0;i < n.getargs().size();i++)
@@ -326,10 +326,11 @@ class ASTsemantic {
 
     public type acceptMemaccessnode(memaccessnode n) throws Exception
     {
-        //n.setleft(false);
-        String id = ((idnode) n.retid()).getid();
-        //String f = n.retf().getid();
-        if(!classnames.containsKey(id)) {throw new Exception("error 4 : undefined class");}
+        if(n.retid() instanceof idnode)
+        {
+            String id = ((idnode) n.retid()).getid();
+            if(!classnames.containsKey(id)) {throw new Exception("error 4 : undefined class");}
+        }
         acceptCalcnode(n.retid());
         type t = acceptIdentifier(n.retf());
         if(t.gettypename().equals("id")) {n.setleft(false);}
