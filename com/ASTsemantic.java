@@ -1,5 +1,7 @@
 package com;
 
+import org.stringtemplate.v4.ST;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -80,6 +82,8 @@ class ASTsemantic {
         return new type();
     }
 
+    //........................................................start.....................................................
+
     public void acceptProgramnode(programnode n) throws Exception
     {
         currentscope.push(n.accfield());
@@ -87,6 +91,61 @@ class ASTsemantic {
         classnames = new HashMap<>();
         root = n;
         boolean b = false;
+        funcnode f1 = new funcnode("print", null);
+        f1.settype(new type("void"));
+        f1.getparams().add(new declaration(new type("string"), new idnode("str")));
+        funcnode f2 = new funcnode("println", null);
+        f2.settype(new type("void"));
+        f2.getparams().add(new declaration(new type("string"), new idnode("str")));
+        funcnode f3 = new funcnode("getString", null);
+        f3.settype(new type("string"));
+        funcnode f4 = new funcnode("getInt", null);
+        f4.settype(new type("int"));
+        funcnode f5 = new funcnode("toString", null);
+        f5.settype(new type("string"));
+        f5.getparams().add(new declaration(new type("int"), new idnode("i")));
+        f1.seti(true);
+        f2.seti(true);
+        f3.seti(true);
+        f4.seti(true);
+        f5.seti(true);
+        n.retfunc().add(f1);
+        n.retfunc().add(f2);
+        n.retfunc().add(f3);
+        n.retfunc().add(f4);
+        n.retfunc().add(f5);
+        funcnode f6 = new funcnode("length", null);
+        f6.settype(new type("int"));
+        funcnode f7 = new funcnode("substring", null);
+        f7.settype(new type("string"));
+        f7.getparams().add(new declaration(new type("int"), new idnode("left")));
+        f7.getparams().add(new declaration(new type("int"), new idnode("right")));
+        funcnode f8 = new funcnode("parseInt", null);
+        f8.settype(new type("int"));
+        funcnode f9 = new funcnode("ord", null);
+        f9.settype(new type("int"));
+        f9.getparams().add(new declaration(new type("int"), new idnode("pos")));
+        f6.seti(true);
+        f7.seti(true);
+        f8.seti(true);
+        f9.seti(true);
+        classnode c = new classnode("string");
+        c.addfunc(f6);
+        c.addfunc(f7);
+        c.addfunc(f8);
+        c.addfunc(f9);
+        n.retclass().add(c);
+        funcnames.add("print");
+        funcnames.add("println");
+        funcnames.add("getString");
+        funcnames.add("getInt");
+        funcnames.add("toString");
+        ArrayList<String> str = new ArrayList<>();
+        str.add("length");
+        str.add("substring");
+        str.add("parseInt");
+        str.add("ord");
+        classnames.put("string", str);
         for(int i = 0;i < n.retclass().size();i++)
         {
             acceptClassnode(n.retclass().get(i));
@@ -107,6 +166,7 @@ class ASTsemantic {
 
     public void acceptClassnode(classnode n) throws Exception
     {
+        if(n.getclassname().getid().equals("string")) {return;}
         currentscope.push(n.accfield());
         ArrayList<String> a = new ArrayList<>();
         for(int i = 0;i < n.retfunc().size();i++)
@@ -133,6 +193,8 @@ class ASTsemantic {
 
     public void acceptFuncnode(funcnode n) throws Exception
     {
+        String pre = n.getname();
+        if(n.geti()) {return;}
         //ArrayList<declaration> a = new ArrayList<>();
         blocknode b = n.getblock();
         for(int i = 0;i < n.getparams().size();i++)
@@ -163,6 +225,11 @@ class ASTsemantic {
     {
         currentscope.push(n.accfield());
         type t = new type();
+        for(int i = 0;i < n.getdecls().size();i++)
+        {
+            if(!exist(n.getdecls().get(i).gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
+            n.accfield().addvar(n.getdecls().get(i).gettyp(), new idnode(n.getdecls().get(i).getid()));
+        }
         for(int i = 0;i < n.getnestblock().size();i++)
         {acceptBlocknode(n.getnestblock().get(i));}
         for(int i = 0;i < n.getcalcs().size();i++)
@@ -193,11 +260,7 @@ class ASTsemantic {
         {acceptLoopnode(n.getloops().get(i));}
         for(int i = 0;i < n.getcondits().size();i++)
         {acceptCondnode(n.getcondits().get(i));}
-        for(int i = 0;i < n.getdecls().size();i++)
-        {
-            if(!exist(n.getdecls().get(i).gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
-            n.accfield().addvar(n.getdecls().get(i).gettyp(), new idnode(n.getdecls().get(i).getid()));
-        }
+
         currentscope.pop();
         return t;
     }
@@ -214,8 +277,7 @@ class ASTsemantic {
     {
         if(n.getinit() != null)
         {
-            type t = acceptCalcnode(n.getinit());
-            if(!t.gettypename().equals("bool")) {throw new Exception("error 8 : nonbool condition");}
+            acceptCalcnode(n.getinit());
         }
         if(n.getquit() != null)
         {
@@ -224,8 +286,7 @@ class ASTsemantic {
         }
         if(n.getincr() != null)
         {
-            type t = acceptCalcnode(n.getincr());
-            if(!t.gettypename().equals("bool")) {throw new Exception("error 8 : nonbool condition");}
+            acceptCalcnode(n.getincr());
         }
         looplevel++;
         acceptBlocknode(n.getstmt());
@@ -283,17 +344,27 @@ class ASTsemantic {
         type t = acceptCalcnode(c);
         if(c instanceof memaccessnode)
         {
-            memaccessnode m = (memaccessnode) c;
-            String s = ((idnode) m.retid()).getid();
+            //memaccessnode m = (memaccessnode) c;
+            //calcnode sc = m.retid();
+            //String fn = m.retf().getid();
+            //int iter = 0;
+            //if(sc instanceof subscriptnode) {sc = ((subscriptnode) sc).retid();iter++;}
+            //String s = ((idnode) sc).getid();
+            //type t = acceptIdentifier((idnode)sc);
+            if(t.isequal(new type("int")))
+            {
+                return new type("int");
+            }
             for(int i = 0;i < root.retclass().size();i++)
             {
-                if(root.retclass().get(i).getclassname().getid().equals(s))
+                if(root.retclass().get(i).getclassname().getid().equals(t.gettypename()))
                 {
                     ArrayList<declaration> d = readdecl(root.retclass().get(i), t.gettypename());
                     type r = readtype(root.retclass().get(i), t.gettypename());
                     for(int j = 0;j < n.getargs().size();j++)
                     {
                         type q = acceptCalcnode(n.getargs().get(j));
+                        //q.setiteration(q.getiteration() - iter);
                         if(!d.get(j).gettyp().isequal(q)) {throw new Exception("error 4 : params mismatch");}
                     }
                     return r;
@@ -308,6 +379,7 @@ class ASTsemantic {
             for(int i = 0;i < n.getargs().size();i++)
             {
                 type p = acceptCalcnode(n.getargs().get(i));
+                //p.setiteration(p.getiteration() - iter);
                 if(!d.get(i).gettyp().isequal(p)) {throw new Exception("error 4 : params mismatch");}
             }
             return r;
@@ -393,12 +465,13 @@ class ASTsemantic {
     {
         n.setleft(true);
         String s = n.getid();
+        if(s.equals("size")) {return new type("int");}
         type t = new type("id");
         if(classnames.containsKey(s) || funcnames.contains(s)) {return t;}
         boolean flag = false;
         for(scope sr : currentscope)
         {
-            if(sr.getvar().containsKey(s)) {t = currentscope.peek().getvar().get(s); flag = true;}
+            if(sr.getvar().containsKey(s)) {t = new type(sr.getvar().get(s)); flag = true;}
         }
         if(!flag){throw new Exception("Error 5 : undefined variable");}
         if(t.gettypename().equals("void")) {throw new Exception("Error 6 : void expression");}
@@ -424,7 +497,8 @@ class ASTsemantic {
         type t1 = acceptCalcnode(n.getlval());
         type t2 = acceptCalcnode(n.getrval());
         if(!n.getlval().getleft()) {throw new Exception("Error 7 : assign nonlvalue");}
-        if(!t1.isequal(t2)) {throw new Exception("Error 6 : wrong expression type");}
+        if(!(t1.isequal(t2) || (!(t1.isequal(new type("int")) || t1.isequal(new type("string"))) && (t2.isequal(new type("null"))))))
+        {throw new Exception("Error 6 : wrong expression type");}
         return t1;
     }
 }

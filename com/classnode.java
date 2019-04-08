@@ -8,7 +8,7 @@ class classnode extends node
     private ArrayList <declaration> classvars;
     private ArrayList <funcnode> classfunc;
     private scope field;
-    public classnode() {field = new scope(this);}
+    public classnode() {field = new scope(this); classvars = new ArrayList<>(); classfunc = new ArrayList<>();}
     public classnode(String name)
     {
         //p.accfield().addchildren(this.field);

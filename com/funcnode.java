@@ -8,12 +8,15 @@ class funcnode extends node
     private idnode funcname;
     private ArrayList<declaration> params;
     private blocknode code;
-    public funcnode(){params = new ArrayList<>();}
+    private boolean isinternal;
+    public funcnode(){params = new ArrayList<>();isinternal = false;}
     public funcnode(String s, blocknode n)
     {
         funcname = new idnode(s);
-        code = new blocknode(n);
+        if(n == null) {code = new blocknode();}
+        else {code = new blocknode(n);}
         params = new ArrayList<>();
+        isinternal = false;
     }
     public blocknode getblock() {return code;}
     public void setname(String s) {funcname = new idnode(s);}
@@ -26,4 +29,6 @@ class funcnode extends node
     }
     public ArrayList<declaration> getparams() {return params;}
     public scope accfield() {return code.accfield();}
+    public boolean geti() {return isinternal;}
+    public void seti(boolean b) {isinternal = b;}
 }
