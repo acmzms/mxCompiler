@@ -82,6 +82,32 @@ class ASTsemantic {
         return new type();
     }
 
+    public type examinetype(type t, type tmp) throws Exception
+    {
+        if(t.isequal(new type(""))) {t = new type(tmp);}
+        else
+        {
+            if(t.isequal(new type("null")))
+            {
+                if(tmp.isequal(new type("int")) || tmp.isequal(new type("void"))) {throw new Exception(("error 3 : wrong return type"));}
+                else {t = new type(tmp);}
+            }
+            else if(t.isequal(new type("int")))
+            {
+                if(!(tmp.isequal(new type("int")) || tmp.isequal(new type("")))) {throw new Exception(("error 3 : wrong return type"));}
+            }
+            else if(t.isequal(new type("string")))
+            {
+                if(!(tmp.isequal(new type("string")))) {throw new Exception(("error 3 : wrong return type"));}
+            }
+            else if(!tmp.isequal(new type("null")))
+            {
+                if(!t.isequal(tmp)) {throw new Exception(("error 3 : wrong return type"));}
+            }
+        }
+        return t;
+    }
+
     //........................................................start.....................................................
 
     public void acceptProgramnode(programnode n) throws Exception
@@ -231,49 +257,43 @@ class ASTsemantic {
             n.accfield().addvar(n.getdecls().get(i).gettyp(), new idnode(n.getdecls().get(i).getid()));
         }
         for(int i = 0;i < n.getnestblock().size();i++)
-        {acceptBlocknode(n.getnestblock().get(i));}
+        {
+            type tmp = acceptBlocknode(n.getnestblock().get(i));
+            t = examinetype(t, tmp);
+        }
         for(int i = 0;i < n.getcalcs().size();i++)
         {acceptCalcnode(n.getcalcs().get(i));}
         for(int i = 0;i < n.getctrls().size();i++)
         {
             type tmp = acceptCtrlnode(n.getctrls().get(i));
-            if(t.isequal(new type(""))) {t = tmp;}
-            if(t.isequal(new type("null")))
-            {
-                if(tmp.isequal(new type("int")) || tmp.isequal(new type("void"))) {throw new Exception(("error 3 : wrong return type"));}
-                else {t = tmp;}
-            }
-            if(t.isequal(new type("int")))
-            {
-                if(!(tmp.isequal(new type("int")) || tmp.isequal(new type("")))) {throw new Exception(("error 3 : wrong return type"));}
-            }
-            if(t.isequal(new type("string")))
-            {
-                if(!(tmp.isequal(new type("string")))) {throw new Exception(("error 3 : wrong return type"));}
-            }
-            else if(!tmp.isequal(new type("null")))
-            {
-                if(!t.isequal(tmp)) {throw new Exception(("error 3 : wrong return type"));}
-            }
+            t = examinetype(t, tmp);
         }
         for(int i = 0;i < n.getloops().size();i++)
-        {acceptLoopnode(n.getloops().get(i));}
+        {
+            type tmp = acceptLoopnode(n.getloops().get(i));
+            t = examinetype(t, tmp);
+        }
         for(int i = 0;i < n.getcondits().size();i++)
-        {acceptCondnode(n.getcondits().get(i));}
-
+        {
+            type tmp = acceptCondnode(n.getcondits().get(i));
+            t = examinetype(t, tmp);
+        }
         currentscope.pop();
         return t;
     }
 
-    public void acceptCondnode(condnode n) throws Exception
+    public type acceptCondnode(condnode n) throws Exception
     {
         type t = acceptCalcnode(n.getcond());
-        acceptBlocknode(n.getif());
-        if(n.getelse() != null) {acceptBlocknode(n.getelse());}
+        type r = new type();
+        type tmp = acceptBlocknode(n.getif());
+        examinetype(r, tmp);
+        if(n.getelse() != null) {r = acceptBlocknode(n.getelse()); examinetype(r, tmp);}
         if(!t.gettypename().equals("bool")){throw new Exception("error 8 : nonbool condition");}
+        return t;
     }
 
-    public void acceptLoopnode(loopnode n) throws Exception
+    public type acceptLoopnode(loopnode n) throws Exception
     {
         if(n.getinit() != null)
         {
@@ -289,8 +309,9 @@ class ASTsemantic {
             acceptCalcnode(n.getincr());
         }
         looplevel++;
-        acceptBlocknode(n.getstmt());
+        type r = acceptBlocknode(n.getstmt());
         looplevel--;
+        return r;
     }
 
     public type acceptCtrlnode(ctrlnode n) throws Exception
