@@ -20,7 +20,7 @@ class constnode extends calcnode
     {
         if(type == 0) return new type("int");
         if(type == 1) return new type("bool");
-        if(type == 2) return new type("String");
+        if(type == 2) return new type("string");
         else return new type("null");
     }
 }

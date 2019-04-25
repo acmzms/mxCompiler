@@ -172,6 +172,10 @@ class ASTsemantic {
         str.add("parseInt");
         str.add("ord");
         classnames.put("string", str);
+        for(int i = 0;i < n.retdecl().size();i++)
+        {
+            n.accfield().addvar(n.retdecl().get(i).gettyp(), new idnode(n.retdecl().get(i).getid()));
+        }
         for(int i = 0;i < n.retclass().size();i++)
         {
             acceptClassnode(n.retclass().get(i));
@@ -183,8 +187,7 @@ class ASTsemantic {
         }
         for(int i = 0;i < n.retdecl().size();i++)
         {
-            if(!exist(n.retdecl().get(i).gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
-            n.accfield().addvar(n.retdecl().get(i).gettyp(), new idnode(n.retdecl().get(i).getid()));
+            if(!exist(n.retdecl().get(i).gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
         }
         if(!b) {throw new Exception("error 0 : no main");}
         currentscope.pop();
@@ -195,6 +198,12 @@ class ASTsemantic {
         if(n.getclassname().getid().equals("string")) {return;}
         currentscope.push(n.accfield());
         ArrayList<String> a = new ArrayList<>();
+        for(int i = 0;i < n.retdecl().size();i++)
+        {
+            declaration d = n.retdecl().get(i);
+            if(!exist(d.gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
+            n.accfield().addvar(d.gettyp(), new idnode (d.getid()));
+        }
         for(int i = 0;i < n.retfunc().size();i++)
         {
             acceptFuncnode(n.retfunc().get(i));
@@ -205,14 +214,7 @@ class ASTsemantic {
         classnames.put(n.getclassname().getid(), a);
         for(int i = 0;i < n.retdecl().size();i++)
         {
-            declaration d = n.retdecl().get(i);
-            if(!exist(d.gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
-            n.accfield().addvar(d.gettyp(), new idnode (d.getid()));
-        }
-        for(int i = 0;i < n.retdecl().size();i++)
-        {
-            if(!exist(n.retdecl().get(i).gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
-            n.accfield().addvar(n.retdecl().get(i).gettyp(), new idnode(n.retdecl().get(i).getid()));
+            if(!exist(n.retdecl().get(i).gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
         }
         currentscope.pop();
     }
@@ -227,7 +229,7 @@ class ASTsemantic {
         {
             declaration d = n.getparams().get(i);
             //a.add(d);
-            if(!exist(d.gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
+            if(!exist(d.gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
             b.accfield().addvar(d.gettyp(), new idnode(d.getid()));
         }
         type cmp1 = acceptBlocknode(b);
@@ -253,7 +255,7 @@ class ASTsemantic {
         type t = new type();
         for(int i = 0;i < n.getdecls().size();i++)
         {
-            if(!exist(n.getdecls().get(i).gettyp().gettypename())){throw new Exception("Error 4 : undefined class");}
+            if(!exist(n.getdecls().get(i).gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
             n.accfield().addvar(n.getdecls().get(i).gettyp(), new idnode(n.getdecls().get(i).getid()));
         }
         for(int i = 0;i < n.getnestblock().size();i++)
@@ -419,13 +421,16 @@ class ASTsemantic {
 
     public type acceptMemaccessnode(memaccessnode n) throws Exception
     {
-        if(n.retid() instanceof idnode)
+        String c = acceptCalcnode(n.retid()).gettypename();
+        scope sc = new scope();
+        for(classnode cl : root.retclass())
         {
-            String id = ((idnode) n.retid()).getid();
-            if(!classnames.containsKey(id)) {throw new Exception("error 4 : undefined class");}
+            if(cl.getclassname().getid().equals(c))
+            {
+                sc = cl.accfield();
+            }
         }
-        acceptCalcnode(n.retid());
-        type t = acceptIdentifier(n.retf());
+        type t = acceptIdentifierAlter(n.retf(), sc);
         if(t.gettypename().equals("id")) {n.setleft(false);}
         else {n.setleft(true);}
         return t;
@@ -434,14 +439,14 @@ class ASTsemantic {
     public type acceptPrefixnode(prefixnode n) throws Exception
     {
         n.setleft(false);
-        if(!n.getexpr().getleft()) {throw new Exception("Error 7 : increment nonlvalue");}
+        if(!n.getexpr().getleft()) {throw new Exception("error 7 : increment nonlvalue");}
         return acceptCalcnode(n.getexpr());
     }
 
     public type acceptSuffixnode(suffixnode n) throws Exception
     {
         n.setleft(false);
-        if(!n.getexpr().getleft()) {throw new Exception("Error 7 : increment nonlvalue");}
+        if(!n.getexpr().getleft()) {throw new Exception("error 7 : increment nonlvalue");}
         return acceptCalcnode(n.getexpr());
     }
 
@@ -462,7 +467,7 @@ class ASTsemantic {
         n.setleft(false);
         type t1 = acceptCalcnode(n.getlval());
         type t2 = acceptCalcnode(n.getrval());
-        if(!t1.isequal(t2)) {throw new Exception("Error 6 : wrong expression type");}
+        if(!t1.isequal(t2)) {throw new Exception("error 6 : wrong expression type");}
         switch (n.getop()) {
             case 7:
             case 8:
@@ -494,8 +499,21 @@ class ASTsemantic {
         {
             if(sr.getvar().containsKey(s)) {t = new type(sr.getvar().get(s)); flag = true;}
         }
-        if(!flag){throw new Exception("Error 5 : undefined variable");}
-        if(t.gettypename().equals("void")) {throw new Exception("Error 6 : void expression");}
+        if(!flag){throw new Exception("error 5 : undefined variable");}
+        if(t.gettypename().equals("void")) {throw new Exception("error 6 : void expression");}
+        return t;
+    }
+
+    public type acceptIdentifierAlter(idnode n, scope sc) throws Exception
+    {
+        n.setleft(true);
+        String s = n.getid();
+        if(s.equals("size")) {return new type("int");}
+        type t = new type("id");
+        if(classnames.containsKey(s) || funcnames.contains(s)) {return t;}
+        if(sc.getvar().containsKey(s)) {t = new type(sc.getvar().get(s));}
+        else {throw new Exception("error 5 : undefined variable");}
+        if(t.gettypename().equals("void")) {throw new Exception("error 6 : void expression");}
         return t;
     }
 
@@ -517,9 +535,9 @@ class ASTsemantic {
         n.setleft(false);
         type t1 = acceptCalcnode(n.getlval());
         type t2 = acceptCalcnode(n.getrval());
-        if(!n.getlval().getleft()) {throw new Exception("Error 7 : assign nonlvalue");}
+        if(!n.getlval().getleft()) {throw new Exception("error 7 : assign nonlvalue");}
         if(!(t1.isequal(t2) || (!(t1.isequal(new type("int")) || t1.isequal(new type("string"))) && (t2.isequal(new type("null"))))))
-        {throw new Exception("Error 6 : wrong expression type");}
+        {throw new Exception("error 6 : wrong expression type");}
         return t1;
     }
 }

@@ -107,7 +107,7 @@ class ASTtraverse extends mxBaseVisitor<node>
         }
         if(ctx.typename() == null)
         {
-            f.settype(new type("Void"));
+            f.settype(new type("void"));
         }
         else
         {
