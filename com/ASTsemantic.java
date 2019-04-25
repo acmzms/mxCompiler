@@ -196,6 +196,7 @@ class ASTsemantic {
     public void acceptClassnode(classnode n) throws Exception
     {
         if(n.getclassname().getid().equals("string")) {return;}
+        classnames.put(n.getclassname().getid(), new ArrayList<>());
         currentscope.push(n.accfield());
         ArrayList<String> a = new ArrayList<>();
         for(int i = 0;i < n.retdecl().size();i++)
@@ -225,6 +226,7 @@ class ASTsemantic {
         if(n.geti()) {return;}
         //ArrayList<declaration> a = new ArrayList<>();
         blocknode b = n.getblock();
+        funcnames.add(n.getname());
         for(int i = 0;i < n.getparams().size();i++)
         {
             declaration d = n.getparams().get(i);
@@ -246,7 +248,6 @@ class ASTsemantic {
         }
         else if(!cmp1.isequal(cmp2)) {throw new Exception(("error 3 : wrong return type"));}
         //currentscope.peek().getf().put(n.getname(), a);
-        funcnames.add(n.getname());
     }
 
     public type acceptBlocknode(blocknode n) throws Exception
@@ -289,10 +290,10 @@ class ASTsemantic {
         type t = acceptCalcnode(n.getcond());
         type r = new type();
         type tmp = acceptBlocknode(n.getif());
-        examinetype(r, tmp);
-        if(n.getelse() != null) {r = acceptBlocknode(n.getelse()); examinetype(r, tmp);}
+        r = examinetype(r, tmp);
+        if(n.getelse() != null) {tmp = acceptBlocknode(n.getelse()); r = examinetype(r, tmp);}
         if(!t.gettypename().equals("bool")){throw new Exception("error 8 : nonbool condition");}
-        return t;
+        return r;
     }
 
     public type acceptLoopnode(loopnode n) throws Exception
@@ -497,7 +498,11 @@ class ASTsemantic {
         boolean flag = false;
         for(scope sr : currentscope)
         {
-            if(sr.getvar().containsKey(s)) {t = new type(sr.getvar().get(s)); flag = true;}
+            if(sr.getvar().containsKey(s))
+            {
+                t = new type(sr.getvar().get(s));
+                flag = true;
+            }
         }
         if(!flag){throw new Exception("error 5 : undefined variable");}
         if(t.gettypename().equals("void")) {throw new Exception("error 6 : void expression");}
