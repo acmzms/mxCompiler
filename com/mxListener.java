@@ -332,6 +332,18 @@ public interface mxListener extends ParseTreeListener {
 	 */
 	void exitSubexpr(mxParser.SubexprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code nanewexpr}
+	 * labeled alternative in {@link mxParser#calculation}.
+	 * @param ctx the parse tree
+	 */
+	void enterNanewexpr(mxParser.NanewexprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code nanewexpr}
+	 * labeled alternative in {@link mxParser#calculation}.
+	 * @param ctx the parse tree
+	 */
+	void exitNanewexpr(mxParser.NanewexprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code primary}
 	 * labeled alternative in {@link mxParser#calculation}.
 	 * @param ctx the parse tree

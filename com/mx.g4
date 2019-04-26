@@ -139,6 +139,7 @@ calculation
     | lhs = calculation '[' rhs = calculation ']'                                 # array
     | calculation '(' call? ')'                                                   # funccall
     | <assoc = right> op = ('+' | '-' | '++' | '--' | '!' | '~') calculation      # prefix
+    | <assoc = right> New typename '(' ')'                                        # nanewexpr
     | <assoc = right> New typename ('[' calculation ']')* ('[' ']')*              # newexpr
     | lhs = calculation op = ('/' | '*' | '%') rhs = calculation                  # binary
     | lhs = calculation op = ('+' | '-') rhs = calculation                        # binary

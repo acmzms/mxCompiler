@@ -11,6 +11,8 @@ class declaration extends node
     public type gettyp() {return typ;}
     public String getid() {return id.getid();}
     public void seta(assignnode b) {a = b;}
+    public assignnode geta() {return a;}
+    public boolean hasa() {if(a != null) {return true;} {return false;}}
     public void settyp(type s) {typ = s;}
     public void setid(String s) {id = new idnode(s);}
 }

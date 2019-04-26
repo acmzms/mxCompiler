@@ -202,6 +202,13 @@ public interface mxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSubexpr(mxParser.SubexprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code nanewexpr}
+	 * labeled alternative in {@link mxParser#calculation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNanewexpr(mxParser.NanewexprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code primary}
 	 * labeled alternative in {@link mxParser#calculation}.
 	 * @param ctx the parse tree

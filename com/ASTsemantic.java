@@ -236,6 +236,7 @@ class ASTsemantic {
         }
         type cmp1 = acceptBlocknode(b);
         type cmp2 = n.gettype();
+        if(cmp2.isequal(new type(""))) {return;}
         if(cmp1.isequal(new type("null")))
         {
             if(cmp2.isequal(new type("int")) || cmp2.isequal(new type("void")) || cmp2.isequal(new type("string")))
@@ -256,7 +257,9 @@ class ASTsemantic {
         type t = new type();
         for(int i = 0;i < n.getdecls().size();i++)
         {
-            if(!exist(n.getdecls().get(i).gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
+            declaration dc = n.getdecls().get(i);
+            if(!exist(dc.gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
+            acceptDeclaration(dc);
             n.accfield().addvar(n.getdecls().get(i).gettyp(), new idnode(n.getdecls().get(i).getid()));
         }
         for(int i = 0;i < n.getnestblock().size();i++)
@@ -283,6 +286,14 @@ class ASTsemantic {
         }
         currentscope.pop();
         return t;
+    }
+
+    public void acceptDeclaration(declaration d) throws Exception
+    {
+        if(d.hasa())
+        {
+            acceptAssignnode(d.geta());
+        }
     }
 
     public type acceptCondnode(condnode n) throws Exception
@@ -459,6 +470,7 @@ class ASTsemantic {
             acceptCalcnode(n.getsz().get(i));
         }
         type t = new type(n.gettype());
+        if(!exist(t.gettypename())){throw new Exception("error 4 : undefined class");}
         t.setiteration(n.getdim());
         return t;
     }

@@ -423,6 +423,15 @@ class ASTtraverse extends mxBaseVisitor<node>
     }
 
     @Override
+    public node visitNanewexpr(mxParser.NanewexprContext ctx)
+    {
+        newnode n = new newnode();
+        n.setdim(0);
+        n.settype(((type) visit(ctx.typename())));
+        return n;
+    }
+
+    @Override
     public node visitBinary(mxParser.BinaryContext ctx)
     {
         calcnode c1 = (calcnode)visit(ctx.lhs);
