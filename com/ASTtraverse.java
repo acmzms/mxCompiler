@@ -195,22 +195,22 @@ class ASTtraverse extends mxBaseVisitor<node>
         declaration d2 = new declaration(d1);
         if(ctx.calculation() != null)
         {
-            calcnode c = (calcnode)visit(ctx.calculation());
-            calcnode r = new idnode(((declaration)d1).getid());
+            calcnode r = (calcnode)visit(ctx.calculation());
+            calcnode c = new idnode(d1.getid());
             assignnode a = new assignnode(c, r);
             d2.seta(a);
         }
         if(ctx.Identifier() != null)
         {
-            calcnode r = new idnode(((declaration)d1).getid());
-            calcnode l = new idnode(ctx.Identifier().getText());
+            calcnode l = new idnode(d1.getid());
+            calcnode r = new idnode(ctx.Identifier().getText());
             assignnode a = new assignnode(l, r);
             d2.seta(a);
         }
         if(ctx.Constant() != null)
         {
-            calcnode r = new idnode(((declaration)d1).getid());
-            calcnode l = new idnode(ctx.Constant().getText());
+            calcnode l = new idnode(d1.getid());
+            calcnode r = new idnode(ctx.Constant().getText());
             assignnode a = new assignnode(l, r);
             d2.seta(a);
         }

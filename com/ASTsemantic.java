@@ -259,8 +259,8 @@ class ASTsemantic {
         {
             declaration dc = n.getdecls().get(i);
             if(!exist(dc.gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
-            acceptDeclaration(dc);
             n.accfield().addvar(n.getdecls().get(i).gettyp(), new idnode(n.getdecls().get(i).getid()));
+            acceptDeclaration(dc);
         }
         for(int i = 0;i < n.getnestblock().size();i++)
         {
