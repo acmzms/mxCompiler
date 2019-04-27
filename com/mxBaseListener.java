@@ -184,18 +184,6 @@ public class mxBaseListener implements mxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypevar(mxParser.TypevarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTypevar(mxParser.TypevarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatement(mxParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -304,18 +292,6 @@ public class mxBaseListener implements mxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNewexpr(mxParser.NewexprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNewexpr(mxParser.NewexprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterPrefix(mxParser.PrefixContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -323,6 +299,18 @@ public class mxBaseListener implements mxListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrefix(mxParser.PrefixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNewexpr(mxParser.NewexprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNewexpr(mxParser.NewexprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

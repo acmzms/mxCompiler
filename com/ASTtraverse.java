@@ -236,8 +236,28 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitVar(mxParser.VarContext ctx)
     {
-        String s = ctx.typevar().getText();
-        return new type(s);
+        if(ctx.Int() != null)
+        {
+            String s = ctx.Int().getText();
+            return new type(s);
+        }
+        if(ctx.Bool() != null)
+        {
+            String s = ctx.Bool().getText();
+            return new type(s);
+        }
+        if(ctx.String() != null)
+        {
+            String s = ctx.String().getText();
+            return new type(s);
+        }
+        if(ctx.Identifier() != null)
+        {
+            String s = ctx.Identifier().getText();
+            return new type(s);
+        }
+        else return new emptynode();
+        //else throw new rubbishcode();
     }
 
     @Override
@@ -391,7 +411,7 @@ class ASTtraverse extends mxBaseVisitor<node>
         int d = (ctx.getChildCount() - 3) / 2;
         newnode n = new newnode();
         n.setdim(d);
-        n.settype(((type) visit(ctx.typevar())));
+        n.settype(((type) visit(ctx.typename())));
         if(ctx.calculation() != null)
         {
             for (mxParser.CalculationContext t : ctx.calculation())
@@ -407,7 +427,7 @@ class ASTtraverse extends mxBaseVisitor<node>
     {
         newnode n = new newnode();
         n.setdim(0);
-        n.settype(((type) visit(ctx.typevar())));
+        n.settype(((type) visit(ctx.typename())));
         return n;
     }
 
