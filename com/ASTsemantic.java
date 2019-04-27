@@ -183,7 +183,11 @@ class ASTsemantic {
         for(int i = 0;i < n.retfunc().size();i++)
         {
             acceptFuncnode(n.retfunc().get(i));
-            if(n.retfunc().get(i).getname().equals("main")) {b = true;}
+            if(n.retfunc().get(i).getname().equals("main"))
+            {
+                if(n.retfunc().get(i).gettype().gettypename().equals("void")) {throw new Exception("error 0 : void main");}
+                else {b = true;}
+            }
         }
         for(int i = 0;i < n.retdecl().size();i++)
         {
