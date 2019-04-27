@@ -187,8 +187,9 @@ class ASTsemantic {
         }
         for(int i = 0;i < n.retdecl().size();i++)
         {
+            assignnode a = n.retdecl().get(i).geta();
             if(!exist(n.retdecl().get(i).gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
-            acceptAssignnode(n.retdecl().get(i).geta());
+            if(a != null) {acceptAssignnode(a);}
         }
         if(!b) {throw new Exception("error 0 : no main");}
         currentscope.pop();
