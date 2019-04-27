@@ -545,7 +545,7 @@ class ASTsemantic {
     public type acceptThis(thisnode n)
     {
         n.setleft(false);
-        classnode c = (classnode) currentscope.peek().retptr();
+        classnode c = (classnode) currentscope.get(1).retptr();
         return new type(c.getclassname().getid());
     }
 
