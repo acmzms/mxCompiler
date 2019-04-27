@@ -156,6 +156,16 @@ public interface mxListener extends ParseTreeListener {
 	 */
 	void exitVar(mxParser.VarContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link mxParser#typevar}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypevar(mxParser.TypevarContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link mxParser#typevar}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypevar(mxParser.TypevarContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link mxParser#statement}.
 	 * @param ctx the parse tree
 	 */
@@ -260,18 +270,6 @@ public interface mxListener extends ParseTreeListener {
 	 */
 	void exitFunccall(mxParser.FunccallContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code prefix}
-	 * labeled alternative in {@link mxParser#calculation}.
-	 * @param ctx the parse tree
-	 */
-	void enterPrefix(mxParser.PrefixContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code prefix}
-	 * labeled alternative in {@link mxParser#calculation}.
-	 * @param ctx the parse tree
-	 */
-	void exitPrefix(mxParser.PrefixContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code newexpr}
 	 * labeled alternative in {@link mxParser#calculation}.
 	 * @param ctx the parse tree
@@ -283,6 +281,18 @@ public interface mxListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNewexpr(mxParser.NewexprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code prefix}
+	 * labeled alternative in {@link mxParser#calculation}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrefix(mxParser.PrefixContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code prefix}
+	 * labeled alternative in {@link mxParser#calculation}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrefix(mxParser.PrefixContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code binary}
 	 * labeled alternative in {@link mxParser#calculation}.

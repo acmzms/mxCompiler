@@ -9,10 +9,11 @@ import java.util.Stack;
 class ASTsemantic {
     private int looplevel;
     private Stack<scope> currentscope;
-
+    private classnode currentclass;
     public ASTsemantic() {
         looplevel = 0;
         currentscope = new Stack<>();
+        currentclass = null;
     }
 
     private programnode root;
@@ -198,6 +199,7 @@ class ASTsemantic {
         if(n.getclassname().getid().equals("string")) {return;}
         classnames.put(n.getclassname().getid(), new ArrayList<>());
         currentscope.push(n.accfield());
+        currentclass = n;
         ArrayList<String> a = new ArrayList<>();
         for(int i = 0;i < n.retdecl().size();i++)
         {
@@ -411,6 +413,11 @@ class ASTsemantic {
             //idnode m = (idnode) c;
             ArrayList<declaration> d = readdecl(root, ((idnode) c).getid());
             type r = readtype(root, ((idnode) c).getid());
+            if(d.size() == 0)
+            {
+                d = readdecl(currentclass, ((idnode) c).getid());
+                r = readtype(currentclass, ((idnode) c).getid());
+            }
             for(int i = 0;i < n.getargs().size();i++)
             {
                 type p = acceptCalcnode(n.getargs().get(i));

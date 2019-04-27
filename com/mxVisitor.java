@@ -99,6 +99,12 @@ public interface mxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVar(mxParser.VarContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link mxParser#typevar}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTypevar(mxParser.TypevarContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link mxParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -160,19 +166,19 @@ public interface mxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunccall(mxParser.FunccallContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code prefix}
-	 * labeled alternative in {@link mxParser#calculation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPrefix(mxParser.PrefixContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code newexpr}
 	 * labeled alternative in {@link mxParser#calculation}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNewexpr(mxParser.NewexprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code prefix}
+	 * labeled alternative in {@link mxParser#calculation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrefix(mxParser.PrefixContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code binary}
 	 * labeled alternative in {@link mxParser#calculation}.

@@ -72,10 +72,14 @@ declpair
 
 typename
     : typename '[' ']'                      # arrayvars
-    | Int                                   # var
-    | Bool                                  # var
-    | String                                # var
-    | Identifier                            # var
+    | typevar                               # var
+    ;
+
+typevar
+    : Int
+    | Bool
+    | String
+    | Identifier
     ;
 
 Constant
@@ -137,10 +141,10 @@ calculation
     : calculation op = ('++' | '--')                                              # suffix
     | calculation '.' Identifier                                                  # classfunc
     | lhs = calculation '[' rhs = calculation ']'                                 # array
+    | <assoc = right> New typevar ('(' ')')?                                      # nanewexpr
+    | <assoc = right> New typevar ('[' calculation ']')* ('[' ']')*               # newexpr
     | calculation '(' call? ')'                                                   # funccall
     | <assoc = right> op = ('+' | '-' | '++' | '--' | '!' | '~') calculation      # prefix
-    | <assoc = right> New typename '(' ')'                                        # nanewexpr
-    | <assoc = right> New typename ('[' calculation ']')* ('[' ']')*              # newexpr
     | lhs = calculation op = ('/' | '*' | '%') rhs = calculation                  # binary
     | lhs = calculation op = ('+' | '-') rhs = calculation                        # binary
     | lhs = calculation op = ('<<' | '>>') rhs = calculation                      # binary
