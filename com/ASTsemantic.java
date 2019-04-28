@@ -9,6 +9,7 @@ import java.util.Stack;
 class ASTsemantic {
     private int looplevel;
     private Stack<scope> currentscope;
+    private classnode currentclass;
 
     public ASTsemantic() {
         looplevel = 0;
@@ -115,6 +116,7 @@ class ASTsemantic {
         currentscope.push(n.accfield());
         funcnames = new ArrayList<>();
         classnames = new HashMap<>();
+        currentclass = null;
         root = n;
         boolean b = false;
         funcnode f1 = new funcnode("print", null);
@@ -166,6 +168,10 @@ class ASTsemantic {
         funcnames.add("getString");
         funcnames.add("getInt");
         funcnames.add("toString");
+        //funcnames.add("length");
+        //funcnames.add("substring");
+        //funcnames.add("parseInt");
+        //funcnames.add("ord");
         ArrayList<String> str = new ArrayList<>();
         str.add("length");
         str.add("substring");
@@ -202,6 +208,7 @@ class ASTsemantic {
     public void acceptClassnode(classnode n) throws Exception
     {
         if(n.getclassname().getid().equals("string")) {return;}
+        currentclass = n;
         classnames.put(n.getclassname().getid(), new ArrayList<>());
         currentscope.push(n.accfield());
         ArrayList<String> a = new ArrayList<>();
@@ -215,6 +222,7 @@ class ASTsemantic {
         {
             acceptFuncnode(n.retfunc().get(i));
             a.add(n.retfunc().get(i).getname());
+            //funcnames.add(n.retfunc().get(i).getname());
             if(n.retfunc().get(i).gettype().gettypename().equals(""))
             {if(!n.retfunc().get(i).getname().equals(n.getclassname().getid())){throw new Exception("error 2 : wrong constructor name");}}
         }
@@ -224,6 +232,7 @@ class ASTsemantic {
             if(!exist(n.retdecl().get(i).gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
         }
         currentscope.pop();
+        currentclass = null;
     }
 
     public void acceptFuncnode(funcnode n) throws Exception
@@ -298,7 +307,7 @@ class ASTsemantic {
     {
         if(d.hasa())
         {
-            acceptAssignnode(d.geta());
+            acceptAssignnodeAlter(d.geta(), d.gettyp());
         }
     }
 
@@ -440,12 +449,12 @@ class ASTsemantic {
     public type acceptMemaccessnode(memaccessnode n) throws Exception
     {
         String c = acceptCalcnode(n.retid()).gettypename();
-        scope sc = new scope();
+        classnode sc = new classnode();
         for(classnode cl : root.retclass())
         {
             if(cl.getclassname().getid().equals(c))
             {
-                sc = cl.accfield();
+                sc = cl;
             }
         }
         type t = acceptIdentifierAlter(n.retf(), sc);
@@ -512,14 +521,33 @@ class ASTsemantic {
         String s = n.getid();
         if(s.equals("size")) {return new type("int");}
         type t = new type("id");
-        if(classnames.containsKey(s) || funcnames.contains(s)) {return t;}
-        boolean flag = false;
-        for(scope sr : currentscope)
+        if(classnames.containsKey(s)) {return t;}
+        if(currentclass != null)
         {
+            for(int i = 0;i < currentclass.retfunc().size();i++)
+            {
+                if(currentclass.retfunc().get(i).getname().equals(s)) {return t;}
+            }
+        }
+        if(funcnames.contains(s))
+        {
+            type r = readtype(root, s);
+            if(!r.gettypename().equals("")) {return r;}
+            else
+            {
+                r = readtype(currentclass, s);
+                return r;
+            }
+        }
+        boolean flag = false;
+        for(int i = currentscope.size() - 1; i >= 0; i--)
+        {
+            scope sr = currentscope.get(i);
             if(sr.getvar().containsKey(s))
             {
                 t = new type(sr.getvar().get(s));
                 flag = true;
+                break;
             }
         }
         if(!flag){throw new Exception("error 5 : undefined variable");}
@@ -527,16 +555,48 @@ class ASTsemantic {
         return t;
     }
 
-    public type acceptIdentifierAlter(idnode n, scope sc) throws Exception
+    public type acceptIdentifierAlter(idnode n, classnode sc) throws Exception
     {
         n.setleft(true);
         String s = n.getid();
         if(s.equals("size")) {return new type("int");}
         type t = new type("id");
-        if(classnames.containsKey(s) || funcnames.contains(s)) {return t;}
-        if(sc.getvar().containsKey(s)) {t = new type(sc.getvar().get(s));}
-        else {throw new Exception("error 5 : undefined variable");}
-        if(t.gettypename().equals("void")) {throw new Exception("error 6 : void expression");}
+        if(classnames.containsKey(s)) {return t;}
+        if(currentclass != null)
+        {
+            for(int i = 0;i < currentclass.retfunc().size();i++)
+            {
+                if(currentclass.retfunc().get(i).getname().equals(s)) {return t;}
+            }
+        }
+        if(funcnames.contains(s))
+        {
+            type r = readtype(root, s);
+            if(!r.gettypename().equals("")) {return r;}
+            else
+            {
+                r = readtype(currentclass, s);
+                return r;
+            }
+        }
+        boolean flag = false;
+        if(sc.accfield().getvar().containsKey(s))
+        {
+            t = new type(sc.accfield().getvar().get(s));
+            if(t.gettypename().equals("void")) {throw new Exception("error 6 : void expression");}
+        }
+        else
+        {
+            for(int i = 0;i < sc.retfunc().size();i++)
+            {
+                if(sc.retfunc().get(i).getname().equals(s))
+                {
+                    flag = true;
+                    t = sc.retfunc().get(i).gettype();
+                }
+            }
+        }
+        if(!flag) {throw new Exception("error 5 : undefined variable");}
         return t;
     }
 
@@ -559,6 +619,15 @@ class ASTsemantic {
         type t1 = acceptCalcnode(n.getlval());
         type t2 = acceptCalcnode(n.getrval());
         if(!n.getlval().getleft()) {throw new Exception("error 7 : assign nonlvalue");}
+        if(!(t1.isequal(t2) || (!(t1.isequal(new type("int")) || t1.isequal(new type("string"))) && (t2.isequal(new type("null"))))))
+        {throw new Exception("error 6 : wrong expression type");}
+        return t1;
+    }
+
+    public type acceptAssignnodeAlter(assignnode n, type t1) throws Exception
+    {
+        n.setleft(false);
+        type t2 = acceptCalcnode(n.getrval());
         if(!(t1.isequal(t2) || (!(t1.isequal(new type("int")) || t1.isequal(new type("string"))) && (t2.isequal(new type("null"))))))
         {throw new Exception("error 6 : wrong expression type");}
         return t1;

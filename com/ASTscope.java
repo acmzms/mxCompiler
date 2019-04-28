@@ -37,7 +37,6 @@ class ASTscope
         for(int i = 0;i < b.retblock().size();i++)
         {
             b.accfield().addchildren(b.retblock().get(i).accfield());
-            visitBlocknode(b);
         }
     }
 }
