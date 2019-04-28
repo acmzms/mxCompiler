@@ -504,9 +504,13 @@ class ASTsemantic {
             case 10:
             case 11:
             case 12:
+            {
+                return new type("bool");
+            }
             case 16:
             case 17:
             {
+                if(!(t1.isequal(new type("bool")) && t2.isequal(new type("bool")))) {throw new Exception("error 8 : nonbool condition");}
                 return new type("bool");
             }
             default:
