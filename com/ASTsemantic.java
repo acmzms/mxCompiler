@@ -583,6 +583,7 @@ class ASTsemantic {
         if(sc.accfield().getvar().containsKey(s))
         {
             t = new type(sc.accfield().getvar().get(s));
+            flag = true;
             if(t.gettypename().equals("void")) {throw new Exception("error 6 : void expression");}
         }
         else
