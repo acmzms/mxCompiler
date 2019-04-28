@@ -8,6 +8,8 @@ class programnode extends node
     private ArrayList <funcnode> funcdecls;
     private ArrayList <declaration> declnodes;
     private scope field;
+    public ArrayList<String> funcnames;
+    public HashMap<String, ArrayList<String>> classnames;
     public scope accfield() {return field;}
     public programnode()
     {
@@ -15,6 +17,8 @@ class programnode extends node
         funcdecls = new ArrayList<>();
         declnodes = new ArrayList<>();
         field = new scope(this);
+        funcnames = null;
+        classnames = null;
     }
     public void addclass(classnode c) { classdecls.add(c); }
     public void addfunc(funcnode c) { funcdecls.add(c); }
