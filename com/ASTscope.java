@@ -78,7 +78,7 @@ class ASTscope
 
     public void visitClassnode(classnode c, programnode p)
     {
-        //p.classnames.put(c.getclassname().getid(), new ArrayList<>());
+        if(c.getclassname().getid().equals("string")) {return;}
         ArrayList<String> a = new ArrayList<>();
         for(int i = 0;i < c.retfunc().size();i++)
         {
@@ -91,6 +91,7 @@ class ASTscope
 
     public void visitFuncnode(funcnode f, programnode p)
     {
+        if(f.geti()) {return;}
         blocknode b = f.getblock();
         p.funcnames.add(f.getname());
         visitBlocknode(b, p);
