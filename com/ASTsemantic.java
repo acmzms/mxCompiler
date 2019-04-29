@@ -337,8 +337,8 @@ class ASTsemantic {
             {
                 if(root.retclass().get(i).getclassname().getid().equals(t.gettypename()))
                 {
-                    ArrayList<declaration> d = readdecl(root.retclass().get(i), t.gettypename());
-                    type r = readtype(root.retclass().get(i), t.gettypename());
+                    ArrayList<declaration> d = readdecl(root.retclass().get(i), ((memaccessnode)c).retf().getid());
+                    type r = readtype(root.retclass().get(i), ((memaccessnode)c).retf().getid());
                     for(int j = 0;j < n.getargs().size();j++)
                     {
                         type q = acceptCalcnode(n.getargs().get(j));
