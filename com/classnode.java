@@ -27,7 +27,7 @@ class classnode extends node
     {
         classfunc.add(f);
     }
-    public void adddecl(type a, String b) { classvars.add(new declaration(a, new idnode(b))); }
+    public void adddecl(type a, idnode b) { classvars.add(new declaration(a, new idnode(b))); }
     public ArrayList<funcnode> retfunc() {return classfunc;}
     public ArrayList<declaration> retdecl() {return classvars;}
     public scope accfield() { return field; }

@@ -12,14 +12,14 @@ class funcnode extends node
     public funcnode(){params = new ArrayList<>();isinternal = false;}
     public funcnode(String s, blocknode n)
     {
-        funcname = new idnode(s);
+        funcname = new idnode(s, 0);
         if(n == null) {code = new blocknode();}
         else {code = new blocknode(n);}
         params = new ArrayList<>();
         isinternal = false;
     }
     public blocknode getblock() {return code;}
-    public void setname(String s) {funcname = new idnode(s);}
+    public void setname(String s) {funcname = new idnode(s, 0);}
     public String getname() {return funcname.getid();}
     public void settype(type s) {rettype = new type (s);}
     public type gettype() {return rettype;}

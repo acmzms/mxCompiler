@@ -449,6 +449,7 @@ class ASTsemantic {
 
     public type acceptIdentifier(idnode n) throws Exception
     {
+        int pos = n.getl();
         n.setleft(true);
         String s = n.getid();
         if(s.equals("size")) {return new type("int");}
@@ -477,6 +478,8 @@ class ASTsemantic {
             scope sr = currentscope.get(i);
             if(sr.getvar().containsKey(s))
             {
+                int x = sr.getline().get(s).getl();
+                if(x > pos) {continue;}
                 t = new type(sr.getvar().get(s));
                 flag = true;
                 break;
@@ -489,6 +492,7 @@ class ASTsemantic {
 
     public type acceptIdentifierAlter(idnode n, classnode sc) throws Exception
     {
+        //int pos = n.getl();
         n.setleft(true);
         String s = n.getid();
         if(s.equals("size")) {return new type("int");}
@@ -524,6 +528,8 @@ class ASTsemantic {
             {
                 if(sc.retfunc().get(i).getname().equals(s))
                 {
+                    //int x = sc.accfield().getline().get(s).getl();
+                    //if(x > pos) {continue;}
                     flag = true;
                     t = sc.retfunc().get(i).gettype();
                 }

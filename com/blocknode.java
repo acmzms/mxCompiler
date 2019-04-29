@@ -52,5 +52,5 @@ class blocknode extends node
         if(b instanceof ctrlnode) {ctrls.add((ctrlnode)b);}
     }
     public ArrayList<blocknode> retblock() {return nestblock;}
-    public void addvar(type t, String id) throws Exception {field.addvar(t, new idnode(id));}
+    public void addvar(type t, idnode id) throws Exception {field.addvar(t, new idnode(id));}
 }
