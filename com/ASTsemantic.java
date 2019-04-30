@@ -138,6 +138,19 @@ class ASTsemantic {
         }
         if(!b) {throw new Exception("error 0 : no main");}
         currentscope.pop();
+        ArrayList<String> tes = new ArrayList<>();
+        for(int i = 0;i < n.retfunc().size();i++)
+        {
+            tes.add(n.retfunc().get(i).getname());
+        }
+        for(int i = 0;i < n.retclass().size();i++)
+        {
+            if(tes.contains(n.retclass().get(i).getclassname().getid())) {throw new Exception("error 1 : alias");}
+        }
+        for(String i : n.accfield().getvar().keySet())
+        {
+            if(tes.contains(i)) {throw new Exception("error 1 : alias");}
+        }
     }
 
     public void acceptClassnode(classnode n) throws Exception
