@@ -81,6 +81,7 @@ class ASTsemantic {
     public type examinetype(type t, type tmp) throws Exception
     {
         if(t.isequal(new type(""))) {t = new type(tmp);}
+        else if(tmp.isequal(new type(""))) {return t;}
         else
         {
             if(t.isequal(new type("null")))
@@ -323,7 +324,7 @@ class ASTsemantic {
     {
         n.setleft(false);
         calcnode c = n.getf();
-        type t = acceptCalcnode(c);
+        acceptCalcnode(c);
         if(c instanceof memaccessnode)
         {
             //memaccessnode m = (memaccessnode) c;
@@ -333,7 +334,8 @@ class ASTsemantic {
             //if(sc instanceof subscriptnode) {sc = ((subscriptnode) sc).retid();iter++;}
             //String s = ((idnode) sc).getid();
             //type t = acceptIdentifier((idnode)sc);
-            if(t.isequal(new type("int")))
+            type t = acceptCalcnode(((memaccessnode) c).retid());
+            if(((memaccessnode) c).retf().getid().equals("size"))
             {
                 return new type("int");
             }
@@ -472,7 +474,7 @@ class ASTsemantic {
         {
             for(int i = 0;i < currentclass.retfunc().size();i++)
             {
-                if(currentclass.retfunc().get(i).getname().equals(s)) {return t;}
+                if(currentclass.retfunc().get(i).getname().equals(s)) {return currentclass.retfunc().get(i).gettype();}
             }
         }
         if(root.funcnames.contains(s))
@@ -515,7 +517,7 @@ class ASTsemantic {
         {
             for(int i = 0;i < currentclass.retfunc().size();i++)
             {
-                if(currentclass.retfunc().get(i).getname().equals(s)) {return t;}
+                if(currentclass.retfunc().get(i).getname().equals(s)) {return currentclass.retfunc().get(i).gettype();}
             }
         }
         if(root.funcnames.contains(s))
