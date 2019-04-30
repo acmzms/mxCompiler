@@ -193,6 +193,7 @@ class ASTsemantic {
         }
         type cmp1 = acceptBlocknode(b);
         type cmp2 = n.gettype();
+        if(cmp2.isequal(new type(""))) {acceptBlocknodeAlter(b);}
         String cp = cmp2.gettypename();
         if(!(cp.equals("int") || cp.equals("void") || cp.equals("String") || cp.equals("") || cp.equals("bool")))
         {
@@ -209,6 +210,14 @@ class ASTsemantic {
         }
         if(cmp1.isequal(new type(""))) {return;}
         else if(!cmp1.isequal(cmp2)) {throw new Exception(("error 3 : wrong return type"));}
+    }
+
+    public void acceptBlocknodeAlter(blocknode n) throws Exception
+    {
+        for(int i = 0;i < n.getctrls().size();i++)
+        {
+            if(n.getctrls().get(i).gettype() == 0) {throw new Exception("error3 : return in constructor");}
+        }
     }
 
     public type acceptBlocknode(blocknode n) throws Exception
