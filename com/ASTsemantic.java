@@ -399,15 +399,17 @@ class ASTsemantic {
     public type acceptPrefixnode(prefixnode n) throws Exception
     {
         n.setleft(false);
+        type t = acceptCalcnode(n.getexpr());
         if(!n.getexpr().getleft()) {throw new Exception("error 7 : increment nonlvalue");}
-        return acceptCalcnode(n.getexpr());
+        return t;
     }
 
     public type acceptSuffixnode(suffixnode n) throws Exception
     {
         n.setleft(false);
+        type t = acceptCalcnode(n.getexpr());
         if(!n.getexpr().getleft()) {throw new Exception("error 7 : increment nonlvalue");}
-        return acceptCalcnode(n.getexpr());
+        return t;
     }
 
     public type acceptNewnode(newnode n) throws Exception
