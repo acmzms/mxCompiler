@@ -21,6 +21,7 @@ class mxCompiler
         mxLexer lexer = new mxLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         mxParser parser = new mxParser(tokens);
+        parser.setErrorHandler(new BailErrorStrategy());
         ParseTree tree = parser.program();
         System.out.println("Visitor:");
         ASTtraverse evalByVisitor = new ASTtraverse();
