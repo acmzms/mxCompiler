@@ -185,11 +185,7 @@ class ASTsemantic {
             if(cmp2.isequal(new type("int")) || cmp2.isequal(new type("void")) || cmp2.isequal(new type("string")))
             {throw new Exception(("error 3 : wrong return type"));}
         }
-        if(cmp1.isequal(new type("")))
-        {
-            if(!(cmp2.isequal(new type("int")) || cmp2.isequal(new type("void"))))
-            {throw new Exception(("error 3 : wrong return type"));}
-        }
+        if(cmp1.isequal(new type(""))) {return;}
         else if(!cmp1.isequal(cmp2)) {throw new Exception(("error 3 : wrong return type"));}
     }
 
