@@ -436,7 +436,7 @@ class ASTsemantic {
         n.setleft(false);
         type t1 = acceptCalcnode(n.getlval());
         type t2 = acceptCalcnode(n.getrval());
-        if(!t1.isequal(t2)) {throw new Exception("error 6 : wrong expression type");}
+        if(!(t1.isequal(t2) || t2.isequal(new type("null")))) {throw new Exception("error 6 : wrong expression type");}
         switch (n.getop()) {
             case 7:
             case 8:
