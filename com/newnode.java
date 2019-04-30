@@ -14,5 +14,5 @@ class newnode extends calcnode
     public ArrayList<calcnode> getsz() {return sz;}
     public type rettype() {return new type(type);}
     public int getdim() {return dim;}
-    public type gettype() {return new type(type);}
+    public type gettype() {type t = new type(type); t.setiteration(dim); return t;}
 }

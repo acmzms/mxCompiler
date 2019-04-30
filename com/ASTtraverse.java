@@ -412,17 +412,19 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitNewexpr(mxParser.NewexprContext ctx)
     {
-        int d = (ctx.getChildCount() - 3) / 2;
+        int cnt = 0;
         newnode n = new newnode();
-        n.setdim(d);
         n.settype(((type) visit(ctx.typename())));
         if(ctx.calculation() != null)
         {
             for (mxParser.CalculationContext t : ctx.calculation())
             {
                 n.addsz((calcnode)visit(t));
+                cnt++;
             }
         }
+        int d = (ctx.getChildCount() - 2 - cnt) / 2;
+        n.setdim(d);
         return n;
     }
 
