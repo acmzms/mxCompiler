@@ -9,5 +9,6 @@ class prefixnode extends calcnode
     public prefixnode() {super();}
     public prefixnode(calcnode c) {super(); expr = c;}
     public void setop(int x) {op = x;}
+    public int getop() {return op;}
     public calcnode getexpr(){return expr;}
 }

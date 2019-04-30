@@ -9,5 +9,6 @@ class suffixnode extends calcnode
     public suffixnode() {super();}
     public suffixnode(calcnode c) {super(); expr = c;}
     public void setop(int x) {op = x;}
+    public int getop() {return op;}
     public calcnode getexpr(){return expr;}
 }

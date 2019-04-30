@@ -180,7 +180,7 @@ class ASTsemantic {
         type cmp1 = acceptBlocknode(b);
         type cmp2 = n.gettype();
         String cp = cmp2.gettypename();
-        if(!(cp.equals("int") || cp.equals("void") || cp.equals("String") || cp.equals("")))
+        if(!(cp.equals("int") || cp.equals("void") || cp.equals("String") || cp.equals("") || cp.equals("bool")))
         {
             if(!root.classnames.containsKey(cp))
             {
@@ -404,7 +404,8 @@ class ASTsemantic {
     {
         n.setleft(false);
         type t = acceptCalcnode(n.getexpr());
-        if(!n.getexpr().getleft()) {throw new Exception("error 7 : increment nonlvalue");}
+        if(n.getop() == 0 || n.getop() == 1)
+        {if(!n.getexpr().getleft()) {throw new Exception("error 7 : increment nonlvalue");}}
         return t;
     }
 
@@ -412,7 +413,8 @@ class ASTsemantic {
     {
         n.setleft(false);
         type t = acceptCalcnode(n.getexpr());
-        if(!n.getexpr().getleft()) {throw new Exception("error 7 : increment nonlvalue");}
+        if(n.getop() == 0 || n.getop() == 1)
+        {if(!n.getexpr().getleft()) {throw new Exception("error 7 : increment nonlvalue");}}
         return t;
     }
 
