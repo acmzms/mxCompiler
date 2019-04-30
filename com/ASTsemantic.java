@@ -50,7 +50,7 @@ class ASTsemantic {
                 }
             }
         }
-        return new ArrayList<>();
+        return null;
     }
 
     public type readtype(node n, String name)
@@ -354,7 +354,7 @@ class ASTsemantic {
             //idnode m = (idnode) c;
             ArrayList<declaration> d = readdecl(root, ((idnode) c).getid());
             type r = readtype(root, ((idnode) c).getid());
-            if(d.size() == 0)
+            if(d == null)
             {
                 d = readdecl(currentclass, ((idnode) c).getid());
                 r = readtype(currentclass, ((idnode) c).getid());
