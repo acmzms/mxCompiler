@@ -469,6 +469,21 @@ class ASTsemantic {
         String s = n.getid();
         if(s.equals("size")) {return new type("int");}
         type t = new type("id");
+        boolean flag = false;
+        for(int i = currentscope.size() - 1; i >= 0; i--)
+        {
+            scope sr = currentscope.get(i);
+            if(sr.getvar().containsKey(s))
+            {
+                int x = sr.getline().get(s).getl();
+                if(x > pos) {continue;}
+                t = new type(sr.getvar().get(s));
+                flag = true;
+                break;
+            }
+        }
+        if(t.gettypename().equals("void")) {throw new Exception("error 6 : void expression");}
+        if(flag) {return t;}
         if(root.classnames.containsKey(s)) {return t;}
         if(currentclass != null)
         {
@@ -487,22 +502,7 @@ class ASTsemantic {
                 return r;
             }
         }
-        boolean flag = false;
-        for(int i = currentscope.size() - 1; i >= 0; i--)
-        {
-            scope sr = currentscope.get(i);
-            if(sr.getvar().containsKey(s))
-            {
-                int x = sr.getline().get(s).getl();
-                if(x > pos) {continue;}
-                t = new type(sr.getvar().get(s));
-                flag = true;
-                break;
-            }
-        }
-        if(!flag){throw new Exception("error 5 : undefined variable");}
-        if(t.gettypename().equals("void")) {throw new Exception("error 6 : void expression");}
-        return t;
+        throw new Exception("error 5 : undefined variable");
     }
 
     public type acceptIdentifierAlter(idnode n, classnode sc) throws Exception
