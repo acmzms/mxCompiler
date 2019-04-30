@@ -180,7 +180,7 @@ class ASTsemantic {
         type cmp1 = acceptBlocknode(b);
         type cmp2 = n.gettype();
         String cp = cmp2.gettypename();
-        if(!(cp.equals("int") || cp.equals("void") || cp.equals("String")))
+        if(!(cp.equals("int") || cp.equals("void") || cp.equals("String") || cp.equals("")))
         {
             if(!root.classnames.containsKey(cp))
             {
