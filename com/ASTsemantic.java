@@ -179,7 +179,14 @@ class ASTsemantic {
         }
         type cmp1 = acceptBlocknode(b);
         type cmp2 = n.gettype();
-        acceptIdentifier(new idnode(cmp2.gettypename(), 9999));
+        String cp = cmp2.gettypename();
+        if(!(cp.equals("int") || cp.equals("void") || cp.equals("String")))
+        {
+            if(!root.classnames.containsKey(cp))
+            {
+                throw new Exception("error 4 : undefined class");
+            }
+        }
         if(cmp2.isequal(new type(""))) {return;}
         if(cmp1.isequal(new type("null")))
         {
