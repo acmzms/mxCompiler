@@ -354,6 +354,11 @@ class ASTsemantic {
             //idnode m = (idnode) c;
             ArrayList<declaration> d = readdecl(root, ((idnode) c).getid());
             type r = readtype(root, ((idnode) c).getid());
+            if(d.size() == 0)
+            {
+                d = readdecl(currentclass, ((idnode) c).getid());
+                r = readtype(currentclass, ((idnode) c).getid());
+            }
             for(int i = 0;i < n.getargs().size();i++)
             {
                 type p = acceptCalcnode(n.getargs().get(i));
@@ -511,7 +516,7 @@ class ASTsemantic {
             if(!r.gettypename().equals("")) {return r;}
             else
             {
-                r = readtype(currentclass, s);
+                r = readtype(sc, s);
                 return r;
             }
         }
