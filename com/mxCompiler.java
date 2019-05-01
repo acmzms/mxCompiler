@@ -27,11 +27,11 @@ class mxCompiler
         parser.removeErrorListeners();
         parser.addErrorListener(new SyntaxErrorListener());
         ParseTree tree = parser.program();
-        System.out.println("Visitor:");
+        System.out.println("semantic:");
         ASTtraverse evalByVisitor = new ASTtraverse();
         node n = evalByVisitor.visit(tree);
         astscope.visitProgramnode((programnode) n);
         astsemantic.acceptProgramnode((programnode) n);
-        System.out.println();
+        System.out.println("IR traverse:");
     }
 }
