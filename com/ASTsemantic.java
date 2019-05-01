@@ -191,9 +191,12 @@ class ASTsemantic {
             if(!exist(d.gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
             b.accfield().addvar(d.gettyp(), new idnode(d.getid()));
         }
-        type cmp1 = acceptBlocknode(b);
         type cmp2 = n.gettype();
-        if(cmp2.isequal(new type(""))) {acceptBlocknodeAlter(b);}
+        boolean acc = false;
+        if(cmp2.isequal(new type(""))) {acc = true;}
+        type cmp1 = new type();
+        if(!acc) {cmp1 = acceptBlocknode(b);}
+        else {cmp1 = acceptBlocknodeAlter(b);}
         String cp = cmp2.gettypename();
         if(!(cp.equals("int") || cp.equals("void") || cp.equals("String") || cp.equals("") || cp.equals("bool")))
         {
@@ -210,14 +213,6 @@ class ASTsemantic {
         }
         if(cmp1.isequal(new type(""))) {return;}
         else if(!cmp1.isequal(cmp2)) {throw new Exception(("error 3 : wrong return type"));}
-    }
-
-    public void acceptBlocknodeAlter(blocknode n) throws Exception
-    {
-        for(int i = 0;i < n.getctrls().size();i++)
-        {
-            if(n.getctrls().get(i).gettype() == 0) {throw new Exception("error3 : return in constructor");}
-        }
     }
 
     public type acceptBlocknode(blocknode n) throws Exception
@@ -255,6 +250,45 @@ class ASTsemantic {
             t = examinetype(t, tmp);
         }
         currentscope.pop();
+        return t;
+    }
+
+    public type acceptBlocknodeAlter(blocknode n) throws Exception
+    {
+        currentscope.push(n.accfield());
+        type t = new type();
+        for(int i = 0;i < n.getdecls().size();i++)
+        {
+            declaration dc = n.getdecls().get(i);
+            if(!exist(dc.gettyp().gettypename())){throw new Exception("error 4 : undefined class");}
+            acceptDeclaration(dc);
+            n.accfield().addvar(n.getdecls().get(i).gettyp(), new idnode(n.getdecls().get(i).getid()));
+
+        }
+        for(int i = 0;i < n.getnestblock().size();i++)
+        {
+            type tmp = acceptBlocknode(n.getnestblock().get(i));
+            t = examinetype(t, tmp);
+        }
+        for(int i = 0;i < n.getcalcs().size();i++)
+        {acceptCalcnode(n.getcalcs().get(i));}
+        for(int i = 0;i < n.getctrls().size();i++)
+        {
+            type tmp = acceptCtrlnode(n.getctrls().get(i));
+            t = examinetype(t, tmp);
+        }
+        for(int i = 0;i < n.getloops().size();i++)
+        {
+            type tmp = acceptLoopnode(n.getloops().get(i));
+            t = examinetype(t, tmp);
+        }
+        for(int i = 0;i < n.getcondits().size();i++)
+        {
+            type tmp = acceptCondnode(n.getcondits().get(i));
+            t = examinetype(t, tmp);
+        }
+        currentscope.pop();
+        if(!t.isequal(new type(""))) {throw new Exception("error3 : return in constructor");}
         return t;
     }
 
@@ -559,16 +593,26 @@ class ASTsemantic {
             flag = true;
             if(t.gettypename().equals("void")) {throw new Exception("error 6 : void expression");}
         }
-        else
-        {
-            for(int i = 0;i < sc.retfunc().size();i++)
+        else {
+            for (int i = 0; i < sc.retfunc().size(); i++)
             {
-                if(sc.retfunc().get(i).getname().equals(s))
+                if (sc.retfunc().get(i).getname().equals(s))
                 {
                     //int x = sc.accfield().getline().get(s).getl();
                     //if(x > pos) {continue;}
                     flag = true;
                     t = sc.retfunc().get(i).gettype();
+                }
+            }
+            if (!flag)
+            {
+                for (int i = 0; i < sc.retdecl().size(); i++)
+                {
+                    if(sc.retdecl().get(i).getid().getid().equals(s))
+                    {
+                        flag = true;
+                        t = sc.retdecl().get(i).gettyp();
+                    }
                 }
             }
         }
