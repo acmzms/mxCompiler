@@ -339,7 +339,7 @@ class ASTsemantic {
         {t = acceptThis((thisnode)n );}
         if(n instanceof suffixnode)
         {t = acceptSuffixnode((suffixnode) n);}
-        return t;
+        return new type(t);
     }
 
     public type acceptFunccallnode(funccallnode n) throws Exception
