@@ -373,6 +373,7 @@ class ASTsemantic {
         {t = acceptThis((thisnode)n );}
         if(n instanceof suffixnode)
         {t = acceptSuffixnode((suffixnode) n);}
+        n.settype(t);
         return new type(t);
     }
 

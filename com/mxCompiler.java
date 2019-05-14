@@ -27,11 +27,20 @@ class mxCompiler
         parser.removeErrorListeners();
         parser.addErrorListener(new SyntaxErrorListener());
         ParseTree tree = parser.program();
-        System.out.println("semantic:");
+        //System.out.println("semantic:");
         ASTtraverse evalByVisitor = new ASTtraverse();
         node n = evalByVisitor.visit(tree);
         astscope.visitProgramnode((programnode) n);
         astsemantic.acceptProgramnode((programnode) n);
-        System.out.println("IR traverse:");
+        //System.out.println("IR traverse:");
+        IRvisitor irvisitor = new IRvisitor();
+        irvisitor.travProgramnode((programnode) n);
+        CFGtraverse cfgtraverse = new CFGtraverse(irvisitor.cfglist);
+        cfgtraverse.traverse();
+        Regalloc regalloc = new Regalloc(irvisitor.cfglist, irvisitor.varmap);
+        regalloc.run();
+        NASMbuilder nasmbuilder = new NASMbuilder(irvisitor.cfglist, irvisitor.varmap, irvisitor.funcmap);
+        nasmbuilder.generate();
+        nasmbuilder.printcmd();
     }
 }

@@ -5,12 +5,11 @@ import java.util.*;
 class calcnode extends node
 {
     private boolean isleft;
+    private type ctype;
     public calcnode() {isleft = true;}
-    //public String getname() {return typename.gettypename();}
-    //public type gettype() {return typename;}
     public boolean getleft() {return isleft;}
     public void setleft(boolean b) {isleft = b;}
-    //public void setname(String t) {typename = new type(t);}
-    //public void settype(type t) {typename = new type(t);}
     public calcnode(calcnode c){isleft = getleft();}
+    public type gettype() {return ctype;}
+    public void settype(type t) {ctype = t;}
 }

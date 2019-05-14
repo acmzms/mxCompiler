@@ -14,6 +14,7 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitProgram(mxParser.ProgramContext ctx)
     {
+        int pos = ctx.start.getLine();
         programnode p = new programnode();
         if(ctx.code() != null)
         {
@@ -25,6 +26,7 @@ class ASTtraverse extends mxBaseVisitor<node>
                 if(n instanceof declaration ) {p.adddecl((declaration)n);}
             }
         }
+        p.setline(pos);
         return p;
     }
 
@@ -53,6 +55,7 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitDeclclass(mxParser.DeclclassContext ctx)
     {
+        int pos = ctx.start.getLine();
         String n1 = ctx.Identifier().getText();
         classnode c = new classnode(n1);
         if(ctx.declpair() != null)
@@ -70,12 +73,14 @@ class ASTtraverse extends mxBaseVisitor<node>
                 c.addfunc((funcnode) n2);
             }
         }
+        c.setline(pos);
         return c;
     }
 
     @Override
     public node visitConstructor(mxParser.ConstructorContext ctx)
     {
+        int pos = ctx.start.getLine();
         int x = ctx.start.getLine();
         String n1 = ctx.Identifier().getText();
         node n2 = visit(ctx.expressionblock());
@@ -89,12 +94,14 @@ class ASTtraverse extends mxBaseVisitor<node>
                 f.addparams(((declaration) n).gettyp(), new idnode(((declaration) n).getid().getid(), x));
             }
         }
+        f.setline(pos);
         return f;
     }
 
     @Override
     public node visitFunction(mxParser.FunctionContext ctx)
     {
+        int pos = ctx.start.getLine();
         int x = ctx.start.getLine();
         String n1 = ctx.Identifier().getText();
         node n2 = visit(ctx.expressionblock());
@@ -116,6 +123,7 @@ class ASTtraverse extends mxBaseVisitor<node>
             node n4 = visit(ctx.typename());
             f.settype((type) n4);
         }
+        f.setline(pos);
         return f;
     }
 
@@ -153,6 +161,7 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitExpressionblock(mxParser.ExpressionblockContext ctx)
     {
+        int pos = ctx.start.getLine();
         blocknode b = new blocknode();
         if(ctx.expression() != null)
         {
@@ -167,6 +176,7 @@ class ASTtraverse extends mxBaseVisitor<node>
                 if(n instanceof declaration) {b.adddecl((declaration)n);}
             }
         }
+        b.setline(pos);
         return b;
     }
 
@@ -187,7 +197,10 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitDecls(mxParser.DeclsContext ctx)
     {
-        return visit(ctx.declpair());
+        int pos = ctx.start.getLine();
+        node n = visit(ctx.declpair());
+        n.setline(pos);
+        return n;
     }
 
     @Override
@@ -217,6 +230,7 @@ class ASTtraverse extends mxBaseVisitor<node>
             assignnode a = new assignnode(l, r);
             d2.seta(a);
         }
+        d2.setline(pos);
         return d2;
     }
 
@@ -278,24 +292,26 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitCondition(mxParser.ConditionContext ctx)
     {
+        int pos = ctx.start.getLine();
         calcnode c = (calcnode) visit(ctx.calculation());
+        condnode r = new condnode();
         if(ctx.lstm != null)
         {
             blocknode b1 = (blocknode)visit(ctx.lstm);
             if(ctx.rstm != null)
             {
                 blocknode b2 = (blocknode)visit(ctx.rstm);
-                return new condnode(c, b1, b2);
+                r = new condnode(c, b1, b2);
             }
             else if(ctx.rst != null)
             {
                 blocknode b2 = new blocknode();
                 b2.addnode(visit(ctx.rst));
-                return new condnode(c, b1, b2);
+                r = new condnode(c, b1, b2);
             }
             else
             {
-                return new condnode(c, b1);
+                r = new condnode(c, b1);
             }
         }
         else if(ctx.lst != null)
@@ -305,74 +321,88 @@ class ASTtraverse extends mxBaseVisitor<node>
             if(ctx.rstm != null)
             {
                 blocknode b2 = (blocknode)visit(ctx.rstm);
-                return new condnode(c, b1, b2);
+                r = new condnode(c, b1, b2);
             }
             else if(ctx.rst != null)
             {
                 blocknode b2 = new blocknode();
                 b2.addnode(visit(ctx.rst));
-                return new condnode(c, b1, b2);
+                r = new condnode(c, b1, b2);
             }
             else
             {
-                return new condnode(c, b1);
+                r = new condnode(c, b1);
             }
         }
-        else return new emptynode();
+        r.setline(pos);
+        return r;
     }
 
     @Override
     public node visitForstmt(mxParser.ForstmtContext ctx)
     {
+        int pos = ctx.start.getLine();
         loopnode l = new loopnode();
         if(ctx.init != null) {l.setinit((calcnode)visit(ctx.init));}
         if(ctx.incr != null) {l.setincr((calcnode)visit(ctx.incr));}
         if(ctx.quit != null) {l.setquit((calcnode)visit(ctx.quit));}
         if(ctx.expressionblock() != null) {l.setstmt((blocknode) visit(ctx.expressionblock()));}
         else if(ctx.expression() != null) {blocknode b = new blocknode(); b.addnode(visit(ctx.expression())); l.setstmt(b);}
+        l.setline(pos);
         return l;
     }
 
     @Override
     public node visitWhilestmt(mxParser.WhilestmtContext ctx)
     {
+        int pos = ctx.start.getLine();
         loopnode l = new loopnode();
         l.setquit((calcnode)visit(ctx.calculation()));
         if(ctx.expressionblock() != null) {l.setstmt((blocknode) visit(ctx.expressionblock()));}
         else if(ctx.expression() != null) {blocknode b = new blocknode(); b.addnode(visit(ctx.expression())); l.setstmt(b);}
+        l.setline(pos);
         return l;
     }
 
     @Override
     public node visitRetstmt(mxParser.RetstmtContext ctx)
     {
+        int pos = ctx.start.getLine();
+        retnode r = new retnode();
         if(ctx.calculation() != null)
         {
             calcnode c = (calcnode)visit(ctx.calculation());
-            return new retnode(c);
+            r = new retnode(c);
         }
-        else return new retnode();
+        else {r = new retnode();}
+        r.setline(pos);
+        return r;
     }
 
     @Override
     public node visitContinue(mxParser.ContinueContext ctx)
     {
+        int pos = ctx.start.getLine();
         ctrlnode d = new ctrlnode();
         d.settype(0);
+        d.setline(pos);
         return d;
     }
 
     @Override
     public node visitBreak(mxParser.BreakContext ctx)
     {
+        int pos = ctx.start.getLine();
         ctrlnode d = new ctrlnode();
         d.settype(1);
+        d.setline(pos);
         return d;
     }
 
     @Override
     public node visitFunccall(mxParser.FunccallContext ctx)
     {
+        int pos = ctx.start.getLine();
         calcnode id = (calcnode)visit(ctx.calculation());
         funccallnode f = new funccallnode(id);
         if(ctx.call() != null)
@@ -383,20 +413,25 @@ class ASTtraverse extends mxBaseVisitor<node>
                 f.addargs((calcnode)n.retlist.get(i));
             }
         }
+        f.setline(pos);
         return f;
     }
 
     @Override
     public node visitArray(mxParser.ArrayContext ctx)
     {
+        int pos = ctx.start.getLine();
         calcnode a = (calcnode) visit(ctx.lhs);
         calcnode b = (calcnode) visit(ctx.rhs);
-        return new subscriptnode(a, b);
+        subscriptnode s = new subscriptnode(a, b);
+        s.setline(pos);
+        return s;
     }
 
     @Override
     public node visitPrefix(mxParser.PrefixContext ctx)
     {
+        int pos = ctx.start.getLine();
         calcnode c = (calcnode) visit(ctx.calculation());
         prefixnode p = new prefixnode(c);
         String op = ctx.op.getText();
@@ -406,12 +441,14 @@ class ASTtraverse extends mxBaseVisitor<node>
         if(op.equals("--")) {p.setop(1);}
         if(op.equals("!")) {p.setop(4);}
         if(op.equals("~")) {p.setop(5);}
+        p.setline(pos);
         return p;
     }
 
     @Override
     public node visitNewexpr(mxParser.NewexprContext ctx)
     {
+        int pos = ctx.start.getLine();
         int cnt = 0;
         newnode n = new newnode();
         n.settype(((type) visit(ctx.typename())));
@@ -425,15 +462,18 @@ class ASTtraverse extends mxBaseVisitor<node>
         }
         int d = (ctx.getChildCount() - 2 - cnt) / 2;
         n.setdim(d);
+        n.setline(pos);
         return n;
     }
 
     @Override
     public node visitNanewexpr(mxParser.NanewexprContext ctx)
     {
+        int pos = ctx.start.getLine();
         newnode n = new newnode();
         n.setdim(0);
         n.settype(((type) visit(ctx.typename())));
+        n.setline(pos);
         return n;
     }
 
@@ -441,6 +481,7 @@ class ASTtraverse extends mxBaseVisitor<node>
     public node visitBinary(mxParser.BinaryContext ctx)
     {
         //ctx.start.getLine();
+        int pos = ctx.start.getLine();
         calcnode c1 = (calcnode)visit(ctx.lhs);
         calcnode c2 = (calcnode)visit(ctx.rhs);
         binarynode b = new binarynode();
@@ -466,26 +507,32 @@ class ASTtraverse extends mxBaseVisitor<node>
         if(s.equals("|")) {b.setop(15);}
         if(s.equals("&&")) {b.setop(16);}
         if(s.equals("||")) {b.setop(17);}
+        b.setline(pos);
         return b;
     }
 
     @Override
     public node visitClassfunc(mxParser.ClassfuncContext ctx)
     {
+        int pos = ctx.start.getLine();
         calcnode c = (calcnode)visit(ctx.calculation());
         int l = ctx.start.getLine();
         idnode f = new idnode((ctx.Identifier().getText()), l);
-        return new memaccessnode(c, f);
+        memaccessnode m = new memaccessnode(c, f);
+        m.setline(pos);
+        return m;
     }
 
     @Override
     public node visitSuffix(mxParser.SuffixContext ctx)
     {
+        int pos = ctx.start.getLine();
         calcnode c = (calcnode)visit(ctx.calculation());
         suffixnode p = new suffixnode(c);
         String op = ctx.op.getText();
         if(op.equals("++")) {p.setop(0);}
         if(op.equals("--")) {p.setop(1);}
+        p.setline(pos);
         return p;
     }
 
@@ -517,8 +564,11 @@ class ASTtraverse extends mxBaseVisitor<node>
     @Override
     public node visitAssign(mxParser.AssignContext ctx)
     {
+        int pos = ctx.start.getLine();
         calcnode l = (calcnode) visit(ctx.lhs);
         calcnode r = (calcnode) visit(ctx.rhs);
-        return new assignnode(l, r);
+        assignnode a = new assignnode(l, r);
+        a.setline(pos);
+        return a;
     }
 }
