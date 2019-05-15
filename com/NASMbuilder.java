@@ -11,11 +11,12 @@ class NASMbuilder
     private ArrayList<String> oc;
     private ArrayList<String> ed;
     private HashMap<varlistmem, Integer> ml;
+    private int sl;
     private int vn;
     private Builtin bt;
     public NASMbuilder(ArrayList<CFGnode> a, ArrayList<varlistmem> b, HashMap<spair, CFGnode> c)
     {
-        cfg = a; va = b; fn = c; vn = 0;
+        cfg = a; va = b; fn = c; vn = 0; sl = 0;
         oc = new ArrayList<>();
         ed = new ArrayList<>();
         ml = new HashMap<>();
@@ -81,7 +82,8 @@ class NASMbuilder
     {
         vn = vn + 8;
         oc.add("\tpush 0");
-        oc.add("\tsub rsp 8");
+        sl++;
+        //oc.add("\tsub rsp 8");
         return vn;
     }
     private void binary(CFGlist d, String s)
@@ -114,7 +116,9 @@ class NASMbuilder
             {
                 oc.add("\t" + s + " r15 " + x3);
             }
-            int y1 = ml.get(find(d.retreg().get(0)));
+            int y1;
+            if(ml.containsKey(find(d.retreg().get(1)))) {y1 = ml.get(find(d.retreg().get(1)));}
+            else {y1 = allocmem(); ml.put(find(d.retreg().get(1)), y1);}
             oc.add("\tmove qword [rbp - " + y1 + "] r15");
         }
         else
@@ -195,6 +199,7 @@ class NASMbuilder
                         }
                     }
                     oc.add("\tpush rbp");
+                    pt.push("rbp");
                 }
                 switch (d.gettyp())
                 {
@@ -241,7 +246,7 @@ class NASMbuilder
                                 if(ml.containsKey(find(d.retreg().get(1)))) {q2 = ml.get(find(d.retreg().get(1)));}
                                 else {q2 = allocmem(); ml.put(find(d.retreg().get(1)), q2);}
                                 oc.add("\tmove rax qword [rbp - " + q2 + "]");
-                                oc.add("\tmove qword [rax]" + p1);
+                                oc.add("\tmove qword [rax] " + p1);
                             }
                             else
                             {
@@ -368,22 +373,22 @@ class NASMbuilder
                                 continue;
                             }
                             switch (sw) {
-                                case 0:
+                                case 1:
                                     fill(x, "rdi", i);
                                     break;
-                                case 1:
+                                case 2:
                                     fill(x, "rsi", i);
                                     break;
-                                case 2:
+                                case 3:
                                     fill(x, "rdx", i);
                                     break;
-                                case 3:
+                                case 4:
                                     fill(x, "rcx", i);
                                     break;
-                                case 4:
+                                case 5:
                                     fill(x, "r8", i);
                                     break;
-                                case 5:
+                                case 6:
                                     fill(x, "r9", i);
                                     break;
                                 default:
@@ -403,7 +408,6 @@ class NASMbuilder
                             }
                             sw++;
                         }
-                        int tmp = fn.get(d.geti()).geti();
                         String tmq = d.geti().getl();
                         switch (tmq)
                         {
@@ -418,7 +422,9 @@ class NASMbuilder
                             case "ord":
                                 oc.add("\tcall " + tmq);
                                 break;
-                            default:oc.add("\tcall %" + tmp);
+                            default:
+                                int tmp = fn.get(d.geti()).geti();
+                                oc.add("\tcall %" + tmp);
                         }
                         String rg = allocreg(find(rtp));
                         if(rg == null)
@@ -503,7 +509,7 @@ class NASMbuilder
                             }
                             else
                             {
-                                oc.add("\tmove qword [rbp - " + y1 + "]" + x2);
+                                oc.add("\tmove qword [rbp - " + y1 + "] " + x2);
                             }
                         }
                         else
@@ -522,7 +528,6 @@ class NASMbuilder
                         }
                         break;
                     case "db":
-                        int z = d.retreg().get(0);
                         String data = d.geti().getl();
                         ed.add(d.geti().getr());
                         ed.add("\tdb" + data);
@@ -534,6 +539,10 @@ class NASMbuilder
                     {
                         String tmr = pt.pop();
                         oc.add("\tpop " + tmr);
+                    }
+                    for(;sl > 0;sl--)
+                    {
+                        oc.add("\tpop");
                     }
                 }
             }

@@ -99,7 +99,6 @@ class Regalloc
     {
         rp.addAll(bm.keySet());
         boolean flag = true;
-        if(rp.size() == 0) {return;}
         while(rp.size() > 1)
         {
             flag = false;
@@ -140,7 +139,7 @@ class Regalloc
                 }
             }
         }
-        sp.push(rp.get(0));
+        if(rp.size() > 0) sp.push(rp.get(0));
     }
     public void select()
     {
