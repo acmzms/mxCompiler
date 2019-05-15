@@ -64,6 +64,7 @@ class Regalloc
         cl = new HashMap<>();
         sp = new Stack<>();
         mp = new Stack<>();
+        if(c.getl().size() == 0) {return;}
         CFGlist n = c.getl().get(c.getl().size() - 1);
         if (n.gettyp().equals("jump"))
         {
@@ -98,6 +99,7 @@ class Regalloc
     {
         rp.addAll(bm.keySet());
         boolean flag = true;
+        if(rp.size() == 0) {return;}
         while(rp.size() > 1)
         {
             flag = false;

@@ -19,6 +19,7 @@ class NASMbuilder
         oc = new ArrayList<>();
         ed = new ArrayList<>();
         ml = new HashMap<>();
+        bt = new Builtin();
     }
     public varlistmem find(int x)
     {
@@ -34,6 +35,7 @@ class NASMbuilder
     public void printcmd()
     {
         System.out.println(bt.info);
+        oc.add("SECTION .data   align=4 noexecute");
         for(String i : oc) {System.out.println(i);}
         for(String i : ed) {System.out.println(i);}
         System.out.println(bt.ed);

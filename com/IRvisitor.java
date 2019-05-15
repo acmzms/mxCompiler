@@ -22,8 +22,8 @@ class IRvisitor
     public IRvisitor()
     {
         cfglist = new ArrayList<>();
-        cfglist.add(new CFGnode());
-        cfglist.add(new CFGnode());
+        cfglist.add(new CFGnode(0));
+        cfglist.add(new CFGnode(1));
         funcmap = new HashMap<>();
         classmap = new HashMap<>();
         varmap = new ArrayList<>();
@@ -93,11 +93,15 @@ class IRvisitor
         {
             travFuncnode(n.retfunc().get(i), "");
         }
+        CFGlist cfg = new CFGlist("jump");
+        cfg.addreg(1);
+        cfglist.get(0).addl(cfg);
         currentscope.pop();
     }
 
     public void travClassnode(classnode c)
     {
+        if(c.getclassname().getid().equals("string")) {return;}
         currentscope.push(c.accfield());
         ArrayList<String> tmp = new ArrayList<>();
         for(int i = 0;i < c.retdecl().size();i++)
@@ -114,6 +118,7 @@ class IRvisitor
 
     public void travFuncnode(funcnode f, String s)
     {
+        if(f.geti()) {return;}
         curfunc = f.getname();
         spair sp = new spair(s,f.getname());
         if(f.getname().equals("main"))

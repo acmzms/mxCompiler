@@ -13,6 +13,7 @@ class CFGtraverse
     }
     public ArrayList<Integer> dfs(CFGnode c)
     {
+        if(c.getl().size() == 0) {return new ArrayList<>();}
         CFGlist n = c.getl().get(c.getl().size() - 1);
         ArrayList<Integer> rt = new ArrayList<>();
         if(n.gettyp().equals("jump"))
