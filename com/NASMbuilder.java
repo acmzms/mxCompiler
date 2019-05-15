@@ -420,6 +420,11 @@ class NASMbuilder
                             case "toString":
                             case "substring":
                             case "ord":
+                            case "str_concat":
+                            case "str_lte":
+                            case "str_less":
+                            case "string_not_equal":
+                            case "string_equal":
                                 oc.add("\tcall " + tmq);
                                 break;
                             default:

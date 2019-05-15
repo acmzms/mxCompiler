@@ -55,15 +55,15 @@ class IRvisitor
             else
             {
                 type t = n.retdecl().get(i).gettyp();
-                if(t.equals(new type("int")))
+                if(t.isequal(new type("int")))
                 {
                     varmap.add(new varlistmem(n.retdecl().get(i).getid().getid(), n.accfield(), curvarnum ,0, 8, looplevel));
                 }
-                if(t.equals(new type("bool")))
+                if(t.isequal(new type("bool")))
                 {
                     varmap.add(new varlistmem(n.retdecl().get(i).getid().getid(), n.accfield(), curvarnum ,0, 1, looplevel));
                 }
-                if(t.equals(new type("string")))
+                if(t.isequal(new type("string")))
                 {
                     varmap.add(new varlistmem(n.retdecl().get(i).getid().getid(), n.accfield(), curvarnum ,2, 8, looplevel));
                 }
@@ -150,15 +150,15 @@ class IRvisitor
             else
             {
                 type t = b.getdecls().get(i).gettyp();
-                if(t.equals(new type("int")))
+                if(t.isequal(new type("int")))
                 {
                     varmap.add(new varlistmem(b.getdecls().get(i).getid().getid(), b.accfield(), curvarnum ,1, 8, looplevel));
                 }
-                if(t.equals(new type("bool")))
+                else if(t.isequal(new type("bool")))
                 {
                     varmap.add(new varlistmem(b.getdecls().get(i).getid().getid(), b.accfield(), curvarnum ,1, 1, looplevel));
                 }
-                if(t.equals(new type("string")))
+                else if(t.isequal(new type("string")))
                 {
                     varmap.add(new varlistmem(b.getdecls().get(i).getid().getid(), b.accfield(), curvarnum ,2, 8, looplevel));
                 }
@@ -625,7 +625,7 @@ class IRvisitor
                 cmd = new CFGlist("rem");
                 break;
             case 3:
-                if(b.getlval().gettype().equals(new type("string")))
+                if(b.getlval().gettype().isequal(new type("string")))
                 {
                     cmd = new CFGlist("call");
                     cmd.seti(new spair("str_concat", ""));
@@ -658,7 +658,7 @@ class IRvisitor
                 cmd = new CFGlist("sgt");
                 break;
             case 9:
-                if(b.getlval().gettype().equals(new type("string")))
+                if(b.getlval().gettype().isequal(new type("string")))
                 {
                     cmd = new CFGlist("call");
                     cmd.seti(new spair("str_less", ""));
@@ -676,7 +676,7 @@ class IRvisitor
                 else {cmd = new CFGlist("slt");}
                 break;
             case 10:
-                if(b.getlval().gettype().equals(new type("string")))
+                if(b.getlval().gettype().isequal(new type("string")))
                 {
                     cmd = new CFGlist("call");
                     cmd.seti(new spair("str_lte", ""));
@@ -694,7 +694,7 @@ class IRvisitor
                 else {cmd = new CFGlist("sle");}
                 break;
             case 11:
-                if(b.getlval().gettype().equals(new type("string")))
+                if(b.getlval().gettype().isequal(new type("string")))
                 {
                     cmd = new CFGlist("call");
                     cmd.seti(new spair("str_not_equal", ""));
@@ -712,7 +712,7 @@ class IRvisitor
                 else {cmd = new CFGlist("sne");}
                 break;
             case 12:
-                if(b.getlval().gettype().equals(new type("string")))
+                if(b.getlval().gettype().isequal(new type("string")))
                 {
                     cmd = new CFGlist("call");
                     cmd.seti(new spair("str_equal", ""));
