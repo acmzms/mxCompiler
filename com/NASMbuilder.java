@@ -12,6 +12,7 @@ class NASMbuilder
     private ArrayList<String> ed;
     private HashMap<varlistmem, Integer> ml;
     private int vn;
+    private Builtin bt;
     public NASMbuilder(ArrayList<CFGnode> a, ArrayList<varlistmem> b, HashMap<spair, CFGnode> c)
     {
         cfg = a; va = b; fn = c; vn = 0;
@@ -32,8 +33,10 @@ class NASMbuilder
     }
     public void printcmd()
     {
+        System.out.println(bt.info);
         for(String i : oc) {System.out.println(i);}
         for(String i : ed) {System.out.println(i);}
+        System.out.println(bt.ed);
     }
     public String allocreg(varlistmem v)
     {
@@ -352,12 +355,17 @@ class NASMbuilder
                             }
                         }
                         int sw = 0;
+                        int rtp = -1;
                         for(int i : d.retreg())
                         {
                             String x = allocreg(find(i));
-                            sw++;
-                            switch(sw)
+                            if (sw == 0)
                             {
+                                rtp = i;
+                                sw++;
+                                continue;
+                            }
+                            switch (sw) {
                                 case 0:
                                     fill(x, "rdi", i);
                                     break;
@@ -377,26 +385,55 @@ class NASMbuilder
                                     fill(x, "r9", i);
                                     break;
                                 default:
-                                    if(x == null)
-                                    {
+                                    if (x == null) {
                                         int y;
-                                        if(ml.containsKey(find(i))) {y = ml.get(find(i));}
-                                        else {y = allocmem(); ml.put(find(i), y);}
+                                        if (ml.containsKey(find(i))) {
+                                            y = ml.get(find(i));
+                                        } else {
+                                            y = allocmem();
+                                            ml.put(find(i), y);
+                                        }
                                         oc.add("\tmove r15 qword [rbp - " + y + "]");
                                         oc.add("\tpush r15");
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         oc.add("\tpush " + x);
                                     }
                             }
-                            int tmp = fn.get(d.geti()).geti();
-                            oc.add("\tcall %" + tmp);
-                            while(ps.size() > 0)
-                            {
-                                String tmq = ps.pop();
-                                oc.add("\tpop " + tmp);
-                            }
+                            sw++;
+                        }
+                        int tmp = fn.get(d.geti()).geti();
+                        String tmq = d.geti().getl();
+                        switch (tmq)
+                        {
+                            case "getString":
+                            case "getInt":
+                            case "length":
+                            case "parseInt":
+                            case "print":
+                            case "println":
+                            case "toString":
+                            case "substring":
+                            case "ord":
+                                oc.add("\tcall " + tmq);
+                                break;
+                            default:oc.add("\tcall %" + tmp);
+                        }
+                        String rg = allocreg(find(rtp));
+                        if(rg == null)
+                        {
+                            int y;
+                            if(ml.containsKey(find(rtp))) {y = ml.get(find(rtp));}
+                            else {y = allocmem(); ml.put(find(rtp), y);}
+                            oc.add("\tmove qword [rbp - " + y + "] rax");
+                        }
+                        else
+                        {
+                            oc.add("\tmove " + rg + " rax");
+                        }
+                        while(ps.size() > 0)
+                        {
+                            String tmd = ps.pop();
+                            oc.add("\tpop " + tmd);
                         }
                         break;
                     case "neg":

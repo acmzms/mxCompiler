@@ -620,7 +620,22 @@ class IRvisitor
                 cmd = new CFGlist("rem");
                 break;
             case 3:
-                cmd = new CFGlist("add");
+                if(b.getlval().gettype().equals(new type("string")))
+                {
+                    cmd = new CFGlist("call");
+                    cmd.seti(new spair("str_concat", ""));
+                    int xz = travCalcnode(b.getlval(), c);
+                    int yz = travCalcnode(b.getrval(), c);
+                    varmap.add(new varlistmem("#tmp", currentscope.peek(), curvarnum, 1, 8, looplevel));
+                    int zz = curvarnum;
+                    curvarnum++;
+                    cmd.addreg(zz);
+                    cmd.addreg(xz);
+                    cmd.addreg(yz);
+                    c.addl(cmd);
+                    return zz;
+                }
+                else {cmd = new CFGlist("add");}
                 break;
             case 4:
                 cmd = new CFGlist("sub");
@@ -638,16 +653,76 @@ class IRvisitor
                 cmd = new CFGlist("sgt");
                 break;
             case 9:
-                cmd = new CFGlist("slt");
+                if(b.getlval().gettype().equals(new type("string")))
+                {
+                    cmd = new CFGlist("call");
+                    cmd.seti(new spair("str_less", ""));
+                    int xz = travCalcnode(b.getlval(), c);
+                    int yz = travCalcnode(b.getrval(), c);
+                    varmap.add(new varlistmem("#tmp", currentscope.peek(), curvarnum, 1, 8, looplevel));
+                    int zz = curvarnum;
+                    curvarnum++;
+                    cmd.addreg(zz);
+                    cmd.addreg(xz);
+                    cmd.addreg(yz);
+                    c.addl(cmd);
+                    return zz;
+                }
+                else {cmd = new CFGlist("slt");}
                 break;
             case 10:
-                cmd = new CFGlist("sle");
+                if(b.getlval().gettype().equals(new type("string")))
+                {
+                    cmd = new CFGlist("call");
+                    cmd.seti(new spair("str_lte", ""));
+                    int xz = travCalcnode(b.getlval(), c);
+                    int yz = travCalcnode(b.getrval(), c);
+                    varmap.add(new varlistmem("#tmp", currentscope.peek(), curvarnum, 1, 8, looplevel));
+                    int zz = curvarnum;
+                    curvarnum++;
+                    cmd.addreg(zz);
+                    cmd.addreg(xz);
+                    cmd.addreg(yz);
+                    c.addl(cmd);
+                    return zz;
+                }
+                else {cmd = new CFGlist("sle");}
                 break;
             case 11:
-                cmd = new CFGlist("sne");
+                if(b.getlval().gettype().equals(new type("string")))
+                {
+                    cmd = new CFGlist("call");
+                    cmd.seti(new spair("str_not_equal", ""));
+                    int xz = travCalcnode(b.getlval(), c);
+                    int yz = travCalcnode(b.getrval(), c);
+                    varmap.add(new varlistmem("#tmp", currentscope.peek(), curvarnum, 1, 8, looplevel));
+                    int zz = curvarnum;
+                    curvarnum++;
+                    cmd.addreg(zz);
+                    cmd.addreg(xz);
+                    cmd.addreg(yz);
+                    c.addl(cmd);
+                    return zz;
+                }
+                else {cmd = new CFGlist("sne");}
                 break;
             case 12:
-                cmd = new CFGlist("seq");
+                if(b.getlval().gettype().equals(new type("string")))
+                {
+                    cmd = new CFGlist("call");
+                    cmd.seti(new spair("str_equal", ""));
+                    int xz = travCalcnode(b.getlval(), c);
+                    int yz = travCalcnode(b.getrval(), c);
+                    varmap.add(new varlistmem("#tmp", currentscope.peek(), curvarnum, 1, 8, looplevel));
+                    int zz = curvarnum;
+                    curvarnum++;
+                    cmd.addreg(zz);
+                    cmd.addreg(xz);
+                    cmd.addreg(yz);
+                    c.addl(cmd);
+                    return zz;
+                }
+                else {cmd = new CFGlist("seq");}
                 break;
             case 13:
             case 16:
