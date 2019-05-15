@@ -44,7 +44,11 @@ class NASMbuilder
     public String allocreg(varlistmem v)
     {
         if(v.retc() == 0) return "rax";
-        if(v.retd() == 2) return "@ [" + v.rete() + "]";
+        if(v.rete() < 0)
+        {
+            int x = -v.rete();
+            return "@" + x;
+        }
         else
         {
             switch(v.retr())

@@ -51,6 +51,7 @@ class IRvisitor
             if(n.retdecl().get(i).gettyp().getiteration() >= 1)
             {
                 varmap.add(new varlistmem(n.retdecl().get(i).getid().getid(), n.accfield(), curvarnum ,1, 8, looplevel));
+                curvarnum++;
             }
             else
             {
@@ -58,14 +59,17 @@ class IRvisitor
                 if(t.isequal(new type("int")))
                 {
                     varmap.add(new varlistmem(n.retdecl().get(i).getid().getid(), n.accfield(), curvarnum ,0, 8, looplevel));
+                    curvarnum++;
                 }
                 if(t.isequal(new type("bool")))
                 {
                     varmap.add(new varlistmem(n.retdecl().get(i).getid().getid(), n.accfield(), curvarnum ,0, 1, looplevel));
+                    curvarnum++;
                 }
                 if(t.isequal(new type("string")))
                 {
                     varmap.add(new varlistmem(n.retdecl().get(i).getid().getid(), n.accfield(), curvarnum ,2, 8, looplevel));
+                    curvarnum++;
                 }
                 else
                 {
@@ -75,6 +79,7 @@ class IRvisitor
                         {
                             int sz = n.retclass().get(j).retdecl().size();
                             varmap.add(new varlistmem(n.retdecl().get(j).getid().getid(), n.accfield(), curvarnum ,0, 8 * sz, looplevel));
+                            curvarnum++;
                         }
                     }
                 }
@@ -83,7 +88,6 @@ class IRvisitor
             {
                 travAssignnode(n.retdecl().get(i).geta(), cn);
             }
-            curvarnum++;
         }
         for(int i = 0;i < n.retclass().size();i++)
         {
@@ -146,6 +150,7 @@ class IRvisitor
             if(b.getdecls().get(i).gettyp().getiteration() >= 1)
             {
                 varmap.add(new varlistmem(b.getdecls().get(i).getid().getid(), b.accfield(), curvarnum ,2, 8, looplevel));
+                curvarnum++;
             }
             else
             {
@@ -153,14 +158,17 @@ class IRvisitor
                 if(t.isequal(new type("int")))
                 {
                     varmap.add(new varlistmem(b.getdecls().get(i).getid().getid(), b.accfield(), curvarnum ,1, 8, looplevel));
+                    curvarnum++;
                 }
                 else if(t.isequal(new type("bool")))
                 {
                     varmap.add(new varlistmem(b.getdecls().get(i).getid().getid(), b.accfield(), curvarnum ,1, 1, looplevel));
+                    curvarnum++;
                 }
                 else if(t.isequal(new type("string")))
                 {
                     varmap.add(new varlistmem(b.getdecls().get(i).getid().getid(), b.accfield(), curvarnum ,2, 8, looplevel));
+                    curvarnum++;
                 }
                 else
                 {
@@ -170,6 +178,7 @@ class IRvisitor
                         {
                             int sz = root.retclass().get(j).retdecl().size();
                             varmap.add(new varlistmem(b.getdecls().get(j).getid().getid(), b.accfield(), curvarnum ,1, 8 * sz, looplevel));
+                            curvarnum++;
                         }
                     }
                 }
@@ -178,7 +187,6 @@ class IRvisitor
             {
                 travAssignnode(b.getdecls().get(i).geta(), c);
             }
-            curvarnum++;
         }
         ArrayList<node> nodes = new ArrayList<>();
         nodes.addAll(b.getnestblock());
@@ -825,7 +833,8 @@ class IRvisitor
             String src = b.getconst();
             CFGlist d = new CFGlist("db");
             d.seti(new spair(src, "@" + curlabnum));
-            varmap.get(xz).sete(curlabnum);
+            varmap.get(xz).sete(-curlabnum);
+            xz = curlabnum;
             curlabnum++;
             c.addl(d);
             return xz;

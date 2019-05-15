@@ -54,8 +54,8 @@ class CFGtraverse
                     {
                         if (k.next().equals(x)) {k.remove();}
                     }
-                    if(!rt.contains(y)) rt.add(y);
-                    if(!rt.contains(z)) rt.add(z);
+                    if(y > 0 && !rt.contains(y)) rt.add(y);
+                    if(z > 0 && !rt.contains(z)) rt.add(z);
                     n.setlv(rt);
                     break;
                 case "neg":
@@ -70,7 +70,7 @@ class CFGtraverse
                     {
                         if (k.next().equals(x)) {k.remove();}
                     }
-                    if(!rt.contains(y)) rt.add(y);
+                    if(y > 0 && !rt.contains(y)) rt.add(y);
                     n.setlv(rt);
                     break;
                 case "movi":
@@ -86,7 +86,7 @@ class CFGtraverse
                     x = j.retreg().get(0);
                     for(Integer h : j.retreg())
                     {
-                        if(!rt.contains(h)) rt.add(h);
+                        if(x > 0 && !rt.contains(h)) rt.add(h);
                     }
                     k = rt.iterator();
                     while (k.hasNext())
@@ -103,14 +103,14 @@ class CFGtraverse
                     {
                         if (k.next().equals(x)) {k.remove();}
                     }
-                    if(!rt.contains(y)) rt.add(y);
+                    if(y > 0 && !rt.contains(y)) rt.add(y);
                     n.setlv(rt);
                     break;
                 case "save":
                     y = j.retreg().get(1);
                     z = j.retreg().get(2);
-                    if(!rt.contains(y)) rt.add(y);
-                    if(!rt.contains(z)) rt.add(z);
+                    if(y > 0 && !rt.contains(y)) rt.add(y);
+                    if(z > 0 && !rt.contains(z)) rt.add(z);
                     n.setlv(rt);
                     break;
                 default:
