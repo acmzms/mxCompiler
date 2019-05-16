@@ -791,8 +791,8 @@ class IRvisitor
         int xz = travCalcnode(a.getlval(), c);
         int yz = travCalcnode(a.getrval(), c);
         CFGlist u = new CFGlist("move");
-        u.addreg(yz);
         u.addreg(xz);
+        u.addreg(yz);
         c.addl(u);
         return xz;
     }
@@ -834,7 +834,7 @@ class IRvisitor
             CFGlist d = new CFGlist("db");
             d.seti(new spair(src, "@" + curlabnum));
             varmap.get(xz).sete(-curlabnum);
-            xz = curlabnum;
+            //xz = curlabnum;
             curlabnum++;
             c.addl(d);
             return xz;
