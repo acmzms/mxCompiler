@@ -1,0 +1,33 @@
+package Mxstar.AST;
+public interface IAstVisitor{
+    void visit(ArrayExpression node);
+    void visit(ArrayTypeNode node);
+    void visit(AssignExpression node);
+    void visit(BinaryExpression node);
+    void visit(BlockStatement node);
+    void visit(BreakStatement node);
+    void visit(ClassDeclaration node);
+    void visit(ClassTypeNode node);
+    void visit(CompilationUnit node);
+    void visit(ContinueStatement node);
+    void visit(Declaration node);
+    void visit(EmptyStatement node);
+    void visit(Expression node);
+    void visit(ExpressionStatement node);
+    void visit(ForStatement node);
+    void visit(FuncCallExpression node);
+    void visit(FuncDeclaration node);
+    void visit(Identifier node);
+    void visit(IfStatement node);
+    void visit(LiteralExpression node);
+    void visit(MemberExpression node);
+    void visit(NewExpression node);
+    void visit(PrimitiveTypeNode node);
+    void visit(ReturnStatement node);
+    void visit(Statement node);
+    void visit(TypeNode node);
+    void visit(UnaryExpression node);
+    void visit(VariableDeclaration node);
+    void visit(VariableDeclarationStatement node);
+    void visit(WhileStatement node);
+}
